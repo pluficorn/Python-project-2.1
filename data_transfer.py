@@ -6,7 +6,7 @@ import time
 arduino_port = connections.arduino_port
 # vraag om de data van de arduino. Idee is 1 regel per keer. 
 # Dit moet elke 60 seconden voor alle sensors worden uitgevoerd
-def get_data(arduino, interval):
+def get_data(arduino):
     
     # https://problemsolvingwithpython.com/11-Python-and-External-Hardware/11.04-Reading-a-Sensor-with-Python/
 

@@ -2,20 +2,40 @@ import data_transfer
 
 # This file is meant for setting the settings. So max
 
+class Arduino():
 
-arduino_dict = data_transfer.arduino_dict
-
-# sets the value voor het uitrollen
-def set_max_out(arduino, value):
-    arduino_dict[arduino]["max. uitrol"] = value
-
-def set_sensortype(arduino, sensor):
-    arduino_dict[arduino]["sensor"] = sensor
-
-def set_signal_out(arduino, value):
-    arduino_dict[arduino]["signaalwaarde"] = value
-
-def set_status(arduino):
-    arduino_dict[arduino]["status"] = data_transfer.get_position(arduino)
+    def __init__(self, naam, status="onbekend"):
+        self.naam = naam
+        self.status = status
 
 
+
+#####################################################################################################################################
+
+class Lichtsensor(Arduino):
+    #bij max gaan ze naar beneden, bij min gaan ze omhoog
+    def __init__(self, naam, status="onbekend", max=80000, min=10000):
+        super().__init__(naam, status)
+        self.min = min
+        self.max = max
+        self.data = str()
+
+#####################################################################################################################################
+
+class Temperatuur(Arduino):
+    #bij max gaan ze naar beneden, bij min gaan ze omhoog
+    def __init__(self, naam, status="onbekend", max=22, min=18):
+        super().__init__(naam, status)
+        self.min = min
+        self.max = max
+        self.data = []
+
+#####################################################################################################################################
+
+class Luchtvochtigheid(Arduino):
+    #bij max gaan ze naar beneden, bij min gaan ze omhoog
+    def __init__(self, naam, status="onbekend", max=80000, min=10000):
+        super().__init__(naam, status)
+        self.min = min
+        self.max = max
+        self.data = str()
