@@ -1,5 +1,8 @@
+import connections
+import data_transfer
+import serial.tools.list_ports
+import time
 # dit is main
-
 
 # haal informatie van de schermen
 
