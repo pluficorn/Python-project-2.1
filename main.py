@@ -1,7 +1,14 @@
-# dit is main
+import connections
+import data_transfer
+import window
+import serial.tools.list_ports
+import time
 
+# Haal lijst met porten op waar arduinos aan verbonden zijn
+arduino_port = connections.arduino_port
 
 # haal informatie van de schermen
+Scherm = window.Window()
 
 # bewaar data geschiedenis
 

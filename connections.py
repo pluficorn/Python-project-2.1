@@ -12,7 +12,7 @@ myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
 arduino_port = [port for port in myports if 'Arduino Uno' in port[1]]
 
 # checks of arduino nog aanwezig is
-def check_presence(correct_port, interval=0.1):
+def check_presence(arduino_port, interval=0.1):
 
     while True:
         myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
