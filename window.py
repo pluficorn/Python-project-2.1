@@ -1,5 +1,6 @@
 from tkinter import * #importeren GUI package
 from tkinter import ttk 
+from tkinter.ttk import *
 
 class Window(Frame):
 
@@ -13,12 +14,12 @@ class Window(Frame):
         
         #verander naam main window
         self.master.title("Centrale")
-        self.pack(fill=BOTH, expand=1)
+        self.pack(fill=BOTH)
 
         #create tabcontrol
         tabControl = ttk.Notebook(mainWindow)
-        tabControl.pack(expand = 1, fill ="both")
-
+        tabControl.pack(expand = 1, fill =BOTH)
+        
         #tab1
         tab1 = ttk.Frame(tabControl)
         tabControl.add(tab1, text='Rolluiken')
@@ -34,7 +35,8 @@ class Window(Frame):
         selectAll.place(x=400, y=150) 
 
         helpButton1 = Button(tab1, text="?")
-        helpButton1.place(x=400, y=200)
+        helpButton1.place(x=400, y=430)
+
 
         #tab 2
         tab2 = ttk.Frame(tabControl)
@@ -42,13 +44,13 @@ class Window(Frame):
 
         #tab 2 button
         helpButton2 = Button(tab2, text="?")
-        helpButton2.place(x=460, y=200)
+        helpButton2.place(x=400, y=430)
 
         #tab 2 dropdown
         dropdown = StringVar(tab2)
-        dropdown.set("1 dag") # default value
+        dropdown.set("dag") # default value
 
-        dropdownMenu = OptionMenu(tab2, dropdown, "1 dag", "1 week", "1 maand", "6 maanden", "1 jaar")
+        dropdownMenu = OptionMenu(tab2, dropdown,"dag", "week", "maand", "jaar")
         dropdownMenu.pack()
         dropdownMenu.place(x=400, y=0) #3 dropdowns
  
@@ -58,12 +60,11 @@ class Window(Frame):
 
         #tap 3 buttons
         helpButton3 = Button(tab3, text="?")
-        helpButton3.place(x=450, y=200)
+        helpButton3.place(x=400, y=430)
 
         save = Button(tab3, text="Wijzigingen opslaan")
         save.place(x=300, y=200)
 
-    
 #create a main window
 mainWindow = Tk() 
 
