@@ -63,8 +63,7 @@ class Window(Frame):
         save = Button(tab3, text="Wijzigingen opslaan")
         save.place(x=300, y=200)
 
-        
-
+    
 #create a main window
 mainWindow = Tk() 
 
