@@ -1,6 +1,6 @@
 from tkinter import * #importeren GUI package
 from tkinter import ttk 
-from tkinter.ttk import *
+from tkinter.ttk import * #de stijl van de GUI
 
 class Window(Frame):
 
