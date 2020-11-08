@@ -13,6 +13,7 @@ class Arduino():
     
     def set_status(self, position):
         data_transfer.set_position(self.port, position)
+        self.status = position
     
     def set_naam(self, naam):
         self.naam = naam
