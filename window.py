@@ -14,16 +14,15 @@ class Window(Frame):
         self.master = master #main frame
         self.init_window()
 
-#     def lineChart(self, dataset):
-#         df = DataFrame(dataset,columns=['Dag','Gemiddelde_temp'])
-        
-#         figure = plt.Figure(figsize=(4,3), dpi=100)
-#         ax = figure.add_subplot(111)
-#         line = FigureCanvasTkAgg(figure, tab2)
-#         line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-#         df = df[['Dag','Gemiddelde_temp']].groupby('Dag').sum()
-#         df.plot(kind='line', legend=True, ax=ax2, color='b',marker='o', fontsize=10)
-#         ax.set_title('Gemiddelde temperatuur')    
+    def lineChart(self, dataset, locatie):
+        df = DataFrame(dataset,columns=['Dag','Gemiddelde_temp'])
+        figure = plt.Figure(figsize=(4,3), dpi=100)
+        ax = figure.add_subplot(111)
+        line = FigureCanvasTkAgg(figure, locatie)
+        line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+        df = df[['Dag','Gemiddelde_temp']].groupby('Dag').sum()
+        df.plot(kind='line', legend=True, ax=ax, color='b',marker='o', fontsize=10)
+        ax.set_title('Gemiddelde temperatuur')    
 
 
     def table(self, dataset):
@@ -78,7 +77,7 @@ class Window(Frame):
         dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010],
          'Gemiddelde_temp': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]
         }  
-        #lineChart(dataset)
+        self.lineChart(dataset, tab2)
 
         #tab 3  
         tab3 = ttk.Frame(tabControl)
@@ -87,7 +86,7 @@ class Window(Frame):
         #tab 3 table
         dataset = {'Name':['Tom', 'nick', 'krish', 'jack'],
         'Age':[20, 21, 19, 18]}
-        table(dataset)
+        self.table(dataset)
 
         #tap 3 buttons
         helpButton3 = Button(tab3, text="?")
