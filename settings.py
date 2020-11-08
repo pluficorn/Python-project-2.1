@@ -1,4 +1,5 @@
 import data_transfer
+import datetime
 
 # This file is meant for setting the settings. So max
 
@@ -16,8 +17,6 @@ class Arduino():
     def set_naam(self, naam):
         self.naam = naam
 
-
-
 #####################################################################################################################################
 
 class Lichtsensor(Arduino):
@@ -26,13 +25,36 @@ class Lichtsensor(Arduino):
         super().__init__(arduino, status)
         self.min = min
         self.max = max
-        self.data = str()
+        self.data = {}
 
     def change_max(self, value):
-        data_transfer.set_max(self.port, value)
+        if value != self.max and value > self.min:
+            data_transfer.set_max(self.port, value)
+            self.max = value
     
     def change_min(self, value):
-        data_transfer.set_min(self.port, value)
+        if value != self.min and value < self.max:
+            data_transfer.set_min(self.port, value)
+            self.min = value
+        
+    def collect_data(self):
+        datum = datetime.datetime.now()
+        jaar = datum.year
+        maand = datum.month
+        dag = datum.month
+
+        data = data_transfer.get_data(self.port)
+
+        if jaar in self.data:
+            if maand in self.data[jaar]:
+                if dag in self.data[jaar][maand]:
+                    self.data[jaar][maand][dag].append(data)
+                else:
+                    self.data[jaar][maand][dag] = [data]
+            else:
+                self.data[jaar][maand][dag] = [data]
+        else:
+            self.data[jaar][maand][dag] = [data]
 
 #####################################################################################################################################
 
@@ -45,10 +67,33 @@ class Temperatuur(Arduino):
         self.data = []
     
     def change_max(self, value):
-        data_transfer.set_max(self.port, value)
+        if value != self.max and value > self.min:
+            data_transfer.set_max(self.port, value)
+            self.max = value
     
     def change_min(self, value):
-        data_transfer.set_min(self.port, value)
+        if value != self.min and value < self.max:
+            data_transfer.set_min(self.port, value)
+            self.min = value
+
+    def collect_data(self):
+        datum = datetime.datetime.now()
+        jaar = datum.year
+        maand = datum.month
+        dag = datum.month
+
+        data = data_transfer.get_data(self.port)
+
+        if jaar in self.data:
+            if maand in self.data[jaar]:
+                if dag in self.data[jaar][maand]:
+                    self.data[jaar][maand][dag].append(data)
+                else:
+                    self.data[jaar][maand][dag] = [data]
+            else:
+                self.data[jaar][maand][dag] = [data]
+        else:
+            self.data[jaar][maand][dag] = [data]
 
 #####################################################################################################################################
 
@@ -61,10 +106,33 @@ class Luchtvochtigheid(Arduino):
         self.data = str()
 
     def change_max(self, value):
-        data_transfer.set_max(self.port, value)
+        if value != self.max and value > self.min:
+            data_transfer.set_max(self.port, value)
+            self.max = value
     
     def change_min(self, value):
-        data_transfer.set_min(self.port, value)
+        if value != self.min and value < self.max:
+            data_transfer.set_min(self.port, value)
+            self.min = value
+    
+    def collect_data(self):
+        datum = datetime.datetime.now()
+        jaar = datum.year
+        maand = datum.month
+        dag = datum.month
+
+        data = data_transfer.get_data(self.port)
+
+        if jaar in self.data:
+            if maand in self.data[jaar]:
+                if dag in self.data[jaar][maand]:
+                    self.data[jaar][maand][dag].append(data)
+                else:
+                    self.data[jaar][maand][dag] = [data]
+            else:
+                self.data[jaar][maand][dag] = [data]
+        else:
+            self.data[jaar][maand][dag] = [data]
 
 #####################################################################################################################################
 

@@ -27,18 +27,22 @@ def get_data(port):
 # methode voor het verkrijgen van de status van de rolluik / scherm (of hij ingerold is, uitgerold, of gedeeltelijk)
 def get_position(port):
     # check which lamp is on on the arduino
-    pass
+    ser = serial.Serial(port, 9600)
+    ser.readline()
 
 # methode om de positie van de rolluik te veranderen
 def set_position(port, positie):
     # tell arduino to turn on other light and thus 'change' the position or status of the arduino
-    pass
+    ser = serial.Serial(port, 9600)
+    ser.write(positie)
 
-def set_max(arduino, max):
-    pass
+def set_max(port, value):
+    ser = serial.Serial(port, 9600)
+    ser.write(value)
 
-def set_min(arduino, min):
-    pass
+def set_min(port, value):
+    ser = serial.Serial(port, 9600)
+    ser.write(value)
 
 
 arduino_dict = {}
