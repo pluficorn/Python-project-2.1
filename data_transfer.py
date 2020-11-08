@@ -2,15 +2,13 @@ import connections
 import serial.tools.list_ports
 import serial
 import time
-
-arduino_port = connections.arduino_port
+from string import ascii_lowercase
 
 # set Baut als constant
 CONST_BAUT = 19200
 CONST_INROLLEN = "0x01"
 CONST_UITROLLEN = "0x02"
 CONST_STOPROLLEN = "0x03"
-
 
 # vraag om de data van de arduino. Idee is 1 regel per keer. 
 # Dit moet elke 60 seconden voor alle sensors worden uitgevoerd
@@ -33,30 +31,29 @@ def get_data(port):
 
 
 # methode voor het verkrijgen van de status van de rolluik / scherm (of hij ingerold is, uitgerold, of gedeeltelijk)
-def get_position(port):
+def receive_info(port):
     # check which lamp is on on the arduino
     ser = serial.Serial(port, CONST_BAUT)
     ser.readline()
 
 # methode om de positie van de rolluik te veranderen
-def set_position(port, positie):
+def send_command(port, command):
     # tell arduino to turn on other light and thus 'change' the position or status of the arduino
+
     ser = serial.Serial(port, CONST_BAUT)
-    ser.write(positie)
+    if command.ascii_lowercase() == 'oprollen':
+        time.sleep(0.1)
+        ser.write(chr(0x01))
 
-def set_max(port, value):
-    ser = serial.Serial(port, CONST_BAUT)
-    ser.write(value)
+    if command.ascii_lowercase() == 'uitrollen':
+        time.sleep(0.1)
+        ser.write(chr(0x02))
+    
 
-def set_min(port, value):
-    ser = serial.Serial(port, CONST_BAUT)
-    ser.write(value)
-
-
-arduino_dict = {}
-for port in arduino_port:
-    arduino_dict[port] = {}
-    arduino_dict[port]["com"] = port[0]
+def change_limiet(port, type, command):
+    pass
+    
+    
 
 # 0X01 -- OPROLLEN
 # 0X02 -- ROLLEN
