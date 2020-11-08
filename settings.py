@@ -1,7 +1,10 @@
 import data_transfer
 import datetime
+import string
 
 # This file is meant for setting the settings. So max
+
+str = string
 
 class Arduino():
 
@@ -12,6 +15,7 @@ class Arduino():
         self.status = status
     
     def set_status(self, position):
+        
         data_transfer.set_position(self.port, position)
         self.status = position
     

@@ -7,6 +7,10 @@ arduino_port = connections.arduino_port
 
 # set Baut als constant
 CONST_BAUT = 19200
+CONST_INROLLEN = "0x01"
+CONST_UITROLLEN = "0x02"
+CONST_STOPROLLEN = "0x03"
+
 
 # vraag om de data van de arduino. Idee is 1 regel per keer. 
 # Dit moet elke 60 seconden voor alle sensors worden uitgevoerd
@@ -53,3 +57,9 @@ arduino_dict = {}
 for port in arduino_port:
     arduino_dict[port] = {}
     arduino_dict[port]["com"] = port[0]
+
+# 0X01 -- OPROLLEN
+# 0X02 -- ROLLEN
+# 0X03 -- STOP_ROLLEN
+
+# .... NOG ONBEKEND VOOR DATA VAN DE SENSOREN
