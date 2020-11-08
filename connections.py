@@ -10,6 +10,7 @@ myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
 
 # als de Arduino Uno in de port zit, toevoegen aan de lijst
 arduino_port = [port for port in myports if 'Arduino Uno' in port[1]]
+print (arduino_port)
 
 # checks of arduino nog aanwezig is
 def check_presence(arduino_port, interval=0.1):
