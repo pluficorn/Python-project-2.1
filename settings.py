@@ -64,7 +64,7 @@ class Temperatuur(Arduino):
         super().__init__(arduino, status)
         self.min = min
         self.max = max
-        self.data = []
+        self.data = {}
     
     def change_max(self, value):
         if value != self.max and value > self.min:
@@ -103,7 +103,7 @@ class Luchtvochtigheid(Arduino):
         super().__init__(arduino, status)
         self.min = min
         self.max = max
-        self.data = str()
+        self.data = {}
 
     def change_max(self, value):
         if value != self.max and value > self.min:
