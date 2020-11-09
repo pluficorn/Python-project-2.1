@@ -127,6 +127,10 @@ class Sensor():
 
         return l
 
+    def laatste_lezing(self):
+        datum = datetime.datetime.now()
+        return self.data[datum.year][datum.month][datum.day][datum.hour][-1]
+
 #####################################################################################################################################
 
 class Lichtsensor(Sensor):
@@ -136,7 +140,7 @@ class Lichtsensor(Sensor):
                 
 #####################################################################################################################################
 
-class Temperatuur(Sensor):
+class Temperatuursensor(Sensor):
     # Bij max gaan ze naar beneden, bij min gaan ze omhoog
     def __init__(self, max=22, min=18):
         super().__init__(min, max)
@@ -153,7 +157,7 @@ class Luchtvochtigheid(Sensor):
 class Arduino():
 
     # arduino is 1 item uit de lijst arduino_port uit connections
-    def __init__(self, arduino, sensor=Sensor(), status="onbekend"):
+    def __init__(self, arduino, status, *sensor):
         self.port = arduino[0]
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor
