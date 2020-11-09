@@ -41,11 +41,11 @@ def send_command(port, command):
     # tell arduino to turn on other light and thus 'change' the position or status of the arduino
 
     ser = serial.Serial(port, CONST_BAUT)
-    if command.ascii_lowercase() == 'oprollen':
+    if command.ascii_lowercase() == 'oprollen' or command.ascii_lowercase() == 'omhoog':
         time.sleep(0.1)
         ser.write(chr(0x01))
 
-    if command.ascii_lowercase() == 'uitrollen':
+    if command.ascii_lowercase() == 'uitrollen' or command.ascii_lowercase() == 'omlaag':
         time.sleep(0.1)
         ser.write(chr(0x02))
     
