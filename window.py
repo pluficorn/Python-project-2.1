@@ -10,6 +10,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pandastable import Table
 
 class Window(Frame):
+    
     def __init__(self, master=None):
         Frame.__init__(self, master)                 
         self.master = master 
@@ -30,23 +31,23 @@ class Window(Frame):
 
         menu.add_command(label="Help", command=self.openHelpmij)
         menu.add_command(label="Exit", command=self.exitProgram)
-        
+
         #helpmij page
         helpmijTekst = tk.Text(helpmij, bg="whitesmoke")
         helpmijTekst.pack(fill="both", expand=1)
         helpmijTekst.insert(tk.END, helpmijtekst)
 
-        #welkomstpagina
-        welkom = tk.Text(root, bg="whitesmoke")
-        welkom.pack(fill="both", expand=1)
-        welkom.insert(tk.END, welkomsttekst)
-
         #rolluiken page
         self.dropdown(tijdelijkeLijst, statusoverzicht)
         self.dropdown(tijdelijkeLijst, temperatuur)
         self.dropdown(tijdelijkeLijst, lichtintensiteit)
-        
-        #gem temp & licht
+        self.dropdown(tijdelijkeLijst, rolluiken)
+        omhoogButton = Button(rolluiken, text="Omhoog", command = self.doNothing) #function placeholder
+        omhoogButton.place(x=460, y=200)
+        omlaagButton = Button(rolluiken, text="Omlaag", command = self.doNothing) #function placeholder
+        omlaagButton.place(x=460, y=250)
+
+        #page temperatuur en lichtintensiteit
         self.lineChartTemperatuur(dataset, temperatuur)
         dropdown = StringVar(temperatuur)
         dropdown.set("Dag") #default value
@@ -65,8 +66,8 @@ class Window(Frame):
         myFont = TkFont.Font(family="helvetica", size=10)
         helpmijTekst.configure(font=myFont, state="disabled")
 
-        #table
-        #tabel = Table(root)
+        #openen startpagina(help)
+        self.openHelpmij()
 
     def lineChartTemperatuur(self, dataset, locatie):
         df = DataFrame(dataset,columns=['Dag','Gemiddelde_temp'])
@@ -123,16 +124,19 @@ class Window(Frame):
         widget = OptionMenu(locatie, dropdown, *lijst)
         widget.pack()
 
-    def overzichtTable(self, locatie, dataset):
-        total_rows = len(dataset) 
-        total_columns = len(dataset[0]) 
-        for i in range(total_rows): 
-            for j in range(total_columns):     
-                self.e = Entry(root, width=20, fg='blue', 
-                               font=('Arial',16,'bold')) 
+    def doNothing(self):
+        pass
+
+    # def overzichtTable(self, locatie, dataset):
+    #     total_rows = len(dataset) 
+    #     total_columns = len(dataset[0]) 
+    #     for i in range(total_rows): 
+    #         for j in range(total_columns):     
+    #             self.e = Entry(root, width=20, fg='blue', 
+    #                            font=('Arial',16,'bold')) 
                   
-                self.e.grid(row=i, column=j) 
-                self.e.insert(END, dataset[i][j])
+    #             self.e.grid(row=i, column=j) 
+    #             self.e.insert(END, dataset[i][j])
         
 #create a main window
 root=tk.Tk() 
@@ -147,7 +151,6 @@ rolluiken=tk.Frame(root, width=600, height=500, bg="black")
 helpmij=tk.Frame(root, width=600, height=500)
 statusoverzicht=tk.Frame(root, width=600, height=500, bg="yellow")
 helpmijtekst = "help mij nu!" #uitschrijven
-welkomsttekst= "Welkom!" #uitschrijven
 
 #placeholders
 tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
