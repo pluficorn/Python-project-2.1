@@ -1,7 +1,7 @@
-import tkinter as tk #importeren GUI package
-from tkinter import *
-from tkinter import ttk 
+import tkinter as tk
 from tkinter.ttk import * 
+import tkinter.font as TkFont
+from tkinter import *
 from matplotlib import * #pip install matplotlib
 from pandas import DataFrame #pip install pandas
 import pandas as pd
@@ -11,10 +11,57 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class Window(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)                 
-        self.master = master #main frame
-        self.init_window()
+        self.master = master 
 
-    def lineChart(self, dataset, locatie):
+        menu = tk.Menu(self.master)
+        self.master.config(menu=menu)
+
+        #adding menus
+        overzicht = tk.Menu(menu, tearoff=False)
+        menu.add_cascade(label="Overzicht", menu=overzicht)
+        overzicht.add_command(label="Statusoverzicht", command=self.openRoot)
+        overzicht.add_command(label="Temperatuur", command=self.openTemperatuur)
+        overzicht.add_command(label="Lichtintensiteit", command=self.openLichtintensiteit)
+
+        instellingen = tk.Menu(menu, tearoff=False)
+        menu.add_cascade(label="Instellingen", menu=instellingen)
+        instellingen.add_command(label="Rolluiken", command=self.openRolluiken)
+
+        menu.add_command(label="Help", command=self.openHelpmij)
+        menu.add_command(label="Exit", command=self.exitProgram)
+        
+        #helpmij page
+        helpmijTekst = tk.Text(helpmij, bg="whitesmoke")
+        helpmijTekst.pack(fill="both", expand=1)
+        helpmijTekst.insert(tk.END, helpmijtekst)
+
+        #rolluiken page
+        #dropdown(tijdelijkeLijst)
+
+        #gem temp & licht
+        self.lineChartTemperatuur(dataset, temperatuur)
+        dropdown = StringVar(temperatuur)
+        dropdown.set("Dag") #default value
+        self.lineChartLicht(dataset2, lichtintensiteit)
+        dropdown = StringVar(lichtintensiteit)
+        dropdown.set("Dag") #default value
+
+        dropdownMenu = OptionMenu(temperatuur, dropdown,"Dag", "Week", "Maand", "Jaar")
+        dropdownMenu.pack()
+        dropdownMenu.place(x=470, y=0)
+        dropdownMenu = OptionMenu(lichtintensiteit, dropdown,"Dag", "Week", "Maand", "Jaar")
+        dropdownMenu.pack()
+        dropdownMenu.place(x=470, y=0)
+        
+        #font
+        myFont = TkFont.Font(family="helvetica", size=10)
+        helpmijTekst.configure(font=myFont, state="disabled")
+
+        #table
+
+
+
+    def lineChartTemperatuur(self, dataset, locatie):
         df = DataFrame(dataset,columns=['Dag','Gemiddelde_temp'])
         figure = plt.Figure(figsize=(4,3), dpi=100)
         ax = figure.add_subplot(111)
@@ -22,90 +69,87 @@ class Window(Frame):
         line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
         df = df[['Dag','Gemiddelde_temp']].groupby('Dag').sum()
         df.plot(kind='line', legend=True, ax=ax, color='b',marker='o', fontsize=10)
-        ax.set_title('Gemiddelde temperatuur')    
+        ax.set_title('Gemiddelde temperatuur')   
 
-
-    def table(self, dataset):
-        table = pd.DataFrame(dataset)
-        print(table)
-
-    #create a main window
-    def init_window(self):
+    def lineChartLicht(self, dataset, locatie):
+        df = DataFrame(dataset,columns=['Dag','Gemiddelde_licht'])
+        figure = plt.Figure(figsize=(4,3), dpi=100)
+        ax = figure.add_subplot(111)
+        line = FigureCanvasTkAgg(figure, locatie)
+        line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+        df = df[['Dag','Gemiddelde_licht']].groupby('Dag').sum()
+        df.plot(kind='line', legend=True, ax=ax, color='r',marker='o', fontsize=10)
+        ax.set_title('Gemiddelde lichtintensiteit')  
         
-        #verander naam main window
-        self.master.title("Centrale")
-        self.pack(fill=BOTH)
+    def hide_frames(self):
+        temperatuur.pack_forget()
+        lichtintensiteit.pack_forget()
+        rolluiken.pack_forget()
+        helpmij.pack_forget()
+    
+    def exitProgram(self):
+        exit()
 
-        #create tabcontrol
-        tabControl = ttk.Notebook(mainWindow)
-        tabControl.pack(expand = 1, fill =BOTH)
+    def openTemperatuur(self):
+        self.hide_frames()
+        temperatuur.pack(fill="both", expand=1)
+
+    def openRoot(self):
+        self.hide_frames()
+        root.mainloop()
+
+    def openLichtintensiteit(self):
+        self.hide_frames()
+        lichtintensiteit.pack(fill="both", expand=1)
+
+    def openRolluiken(self):
+        self.hide_frames()
+        rolluiken.pack(fill="both", expand=1)
+    
+    def openHelpmij(self):
+        self.hide_frames()
+        helpmij.pack(fill="both", expand=1)
+
+    #def dropdown(self, lijst):
+        #dropdown = StringVar(rolluiken)
+        #dropdown.set(lijst[0]) # default value, eerste index
+
+        #widget = OptionMenu(master, dropdown, *lijst)
+        #widget.pack()
+        #return dropdown
+
+    def overzichtTable(self, locatie, dataset):
+        total_rows = len(dataset) 
+        total_columns = len(dataset[0]) 
+        for i in range(total_rows): 
+            for j in range(total_columns):     
+                self.e = Entry(root, width=20, fg='blue', 
+                               font=('Arial',16,'bold')) 
+                  
+                self.e.grid(row=i, column=j) 
+                self.e.insert(END, dataset[i][j])
         
-        #tab1
-        tab1 = ttk.Frame(tabControl)
-        tabControl.add(tab1, text='Rolluiken')
-
-        #tab 1 buttons
-        openRolluik = Button(tab1, text="Omhoog")
-        openRolluik.place(x=400, y=50) 
-
-        sluitRolluik = Button(tab1, text="Omlaag")
-        sluitRolluik.place(x=400, y=100)
-
-        selectAll = Button(tab1, text="Selecteer alles")
-        selectAll.place(x=400, y=150) 
-
-        helpButton1 = Button(tab1, text="?")
-        helpButton1.place(x=400, y=430)
-
-        #tab 2
-        tab2 = ttk.Frame(tabControl)
-        tabControl.add(tab2, text='Data')
-
-        #tab 2 button
-        helpButton2 = Button(tab2, text="?")
-        helpButton2.place(x=400, y=430)
-
-        #tab 2 dropdown
-        dropdown = StringVar(tab2)
-        dropdown.set("dag") # default value
-
-        dropdownMenu = OptionMenu(tab2, dropdown,"dag", "week", "maand", "jaar")
-        dropdownMenu.pack()
-        dropdownMenu.place(x=400, y=0) #3 dropdowns
-
-        #tab2 charts aanroepen
-        dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010],
-         'Gemiddelde_temp': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]
-        }  
-        self.lineChart(dataset, tab2)
-
-        #tab 3  
-        tab3 = ttk.Frame(tabControl)
-        tabControl.add(tab3, text='Instellingen')
-
-        #tab 3 table
-        dataset = {'Name':['Tom', 'nick', 'krish', 'jack'],
-        'Age':[20, 21, 19, 18]}
-        self.table(dataset)
-
-        #tap 3 buttons
-        helpButton3 = Button(tab3, text="?")
-        helpButton3.place(x=400, y=430)
-
-        save = Button(tab3, text="Wijzigingen opslaan")
-        save.place(x=300, y=200)
-
+        
 #create a main window
-mainWindow = Tk() 
+root=tk.Tk() 
+root.title("Centrale")
+root.configure(background='red')
+root.geometry('600x500')
 
-# size window
-mainWindow.geometry('500x500')
+#variabele
+temperatuur=tk.Frame(root, width=600, height=500)
+lichtintensiteit=tk.Frame(root, width=600, height=500)
+rolluiken=tk.Frame(root, width=600, height=500, bg="black")
+helpmij=tk.Frame(root, width=600, height=500)
+helpmijtekst = "help mij nu!" #uitschrijven
 
-#class aanroepen/instellen
-GUI = Window(mainWindow)
+#placeholders
+#tijdelijkeLijst=["egg", "bunny", "chicken"]
+dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder
+         'Gemiddelde_temp': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
+dataset2 = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder
+         'Gemiddelde_licht': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
 
-#start de window
-mainWindow.mainloop()
-
-
-
+#class aanroepen/instellen + start window
+GUI=Window(root)
+root.mainloop()
