@@ -26,7 +26,7 @@ def get_data(port):
     string = string_n.rstrip()              # remove \n and \r
     flt = float(string)                     # convert string to float
 
-    # arduino_serial.close()
+    arduino_serial.close()
     return (flt)
 
 
