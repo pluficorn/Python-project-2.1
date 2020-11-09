@@ -1,3 +1,4 @@
+import arduino
 import connections
 import data_transfer
 import window
@@ -10,7 +11,6 @@ arduino_port = connections.arduino_port
 # haal informatie van de schermen
 Scherm = window.Window()
 
-# bewaar data geschiedenis
 
 # toon gewenste informatie op scherm
 
