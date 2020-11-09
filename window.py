@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter.ttk import * 
 import tkinter.font as TkFont
-from tkinter import *
+from tkinter import * #pip install tk
 from matplotlib import * #pip install matplotlib
 from pandas import DataFrame #pip install pandas
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from pandastable import Table
 
 class Window(Frame):
     def __init__(self, master=None):
@@ -19,7 +20,7 @@ class Window(Frame):
         #adding menus
         overzicht = tk.Menu(menu, tearoff=False)
         menu.add_cascade(label="Overzicht", menu=overzicht)
-        overzicht.add_command(label="Statusoverzicht", command=self.openRoot)
+        overzicht.add_command(label="Statusoverzicht", command=self.openStatusoverzicht)
         overzicht.add_command(label="Temperatuur", command=self.openTemperatuur)
         overzicht.add_command(label="Lichtintensiteit", command=self.openLichtintensiteit)
 
@@ -35,9 +36,16 @@ class Window(Frame):
         helpmijTekst.pack(fill="both", expand=1)
         helpmijTekst.insert(tk.END, helpmijtekst)
 
-        #rolluiken page
-        #dropdown(tijdelijkeLijst)
+        #welkomstpagina
+        welkom = tk.Text(root, bg="whitesmoke")
+        welkom.pack(fill="both", expand=1)
+        welkom.insert(tk.END, welkomsttekst)
 
+        #rolluiken page
+        self.dropdown(tijdelijkeLijst, statusoverzicht)
+        self.dropdown(tijdelijkeLijst, temperatuur)
+        self.dropdown(tijdelijkeLijst, lichtintensiteit)
+        
         #gem temp & licht
         self.lineChartTemperatuur(dataset, temperatuur)
         dropdown = StringVar(temperatuur)
@@ -48,18 +56,17 @@ class Window(Frame):
 
         dropdownMenu = OptionMenu(temperatuur, dropdown,"Dag", "Week", "Maand", "Jaar")
         dropdownMenu.pack()
-        dropdownMenu.place(x=470, y=0)
+        dropdownMenu.place(x=350, y=0)
         dropdownMenu = OptionMenu(lichtintensiteit, dropdown,"Dag", "Week", "Maand", "Jaar")
         dropdownMenu.pack()
-        dropdownMenu.place(x=470, y=0)
+        dropdownMenu.place(x=350, y=0)
         
         #font
         myFont = TkFont.Font(family="helvetica", size=10)
         helpmijTekst.configure(font=myFont, state="disabled")
 
         #table
-
-
+        #tabel = Table(root)
 
     def lineChartTemperatuur(self, dataset, locatie):
         df = DataFrame(dataset,columns=['Dag','Gemiddelde_temp'])
@@ -82,6 +89,7 @@ class Window(Frame):
         ax.set_title('Gemiddelde lichtintensiteit')  
         
     def hide_frames(self):
+        statusoverzicht.pack_forget()
         temperatuur.pack_forget()
         lichtintensiteit.pack_forget()
         rolluiken.pack_forget()
@@ -94,9 +102,9 @@ class Window(Frame):
         self.hide_frames()
         temperatuur.pack(fill="both", expand=1)
 
-    def openRoot(self):
+    def openStatusoverzicht(self):
         self.hide_frames()
-        root.mainloop()
+        statusoverzicht.pack(fill="both", expand=1)
 
     def openLichtintensiteit(self):
         self.hide_frames()
@@ -110,13 +118,10 @@ class Window(Frame):
         self.hide_frames()
         helpmij.pack(fill="both", expand=1)
 
-    #def dropdown(self, lijst):
-        #dropdown = StringVar(rolluiken)
-        #dropdown.set(lijst[0]) # default value, eerste index
-
-        #widget = OptionMenu(master, dropdown, *lijst)
-        #widget.pack()
-        #return dropdown
+    def dropdown(self, lijst, locatie):
+        dropdown.set(lijst[0]) # default value, eerste index
+        widget = OptionMenu(locatie, dropdown, *lijst)
+        widget.pack()
 
     def overzichtTable(self, locatie, dataset):
         total_rows = len(dataset) 
@@ -129,7 +134,6 @@ class Window(Frame):
                 self.e.grid(row=i, column=j) 
                 self.e.insert(END, dataset[i][j])
         
-        
 #create a main window
 root=tk.Tk() 
 root.title("Centrale")
@@ -141,14 +145,17 @@ temperatuur=tk.Frame(root, width=600, height=500)
 lichtintensiteit=tk.Frame(root, width=600, height=500)
 rolluiken=tk.Frame(root, width=600, height=500, bg="black")
 helpmij=tk.Frame(root, width=600, height=500)
+statusoverzicht=tk.Frame(root, width=600, height=500, bg="yellow")
 helpmijtekst = "help mij nu!" #uitschrijven
+welkomsttekst= "Welkom!" #uitschrijven
 
 #placeholders
-#tijdelijkeLijst=["egg", "bunny", "chicken"]
-dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder
+tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
+dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart temperatuur
          'Gemiddelde_temp': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
-dataset2 = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder
+dataset2 = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart lichtintensiteit
          'Gemiddelde_licht': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
+dropdown = StringVar(rolluiken)
 
 #class aanroepen/instellen + start window
 GUI=Window(root)
