@@ -6,10 +6,6 @@ import time
 import threading
 from datetime import timedelta
 
-# This file is meant for setting the settings. So max
-
-str = string
-
 #####################################################################################################################################
 
 class Sensor():
