@@ -48,6 +48,7 @@ class Sensor():
         else:
             self.data[jaar][maand][dag] = [data]
 
+    # returnd lijst van gemiddelden gebasseerd op de periode tussen begin en eind datum (het is tot en met, dus laatste dag wordt ook gegeven)
     def return_data(self, begindatum, einddatum):
 
         b_datum = datetime.datetime(*begindatum)
@@ -105,7 +106,7 @@ class Sensor():
                 l.append((round((totaal/lengte*10)))/10)
 
         # over een volledig jaar of periodes gebasseerd op gemiddelde per maand
-        elif verschil == 365 or (b_datum.month == (e_datum.month - 1) and b_datum.day == (e_datum.day + 1)) or (b_datum.month == e_datum.month and (verschil.days == 30 or verschil.days == 31)):
+        elif verschil.days == 365 or (b_datum.month == (e_datum.month - 1) and b_datum.day == (e_datum.day + 1)) or (b_datum.month == e_datum.month and (verschil.days == 30 or verschil.days == 31)):
             l = []
             for i in range(verschil.days +1):
                 datum = b_datum + timedelta(days=i)
