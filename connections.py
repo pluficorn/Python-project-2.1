@@ -27,15 +27,3 @@ def check_presence(arduino_port, interval=0.1):
 port_controller = threading.Thread(target=check_presence, args=(arduino_port, 0.1,))
 port_controller.setDaemon(True)
 port_controller.start()
-
-
-# voor het plotten van een lijngrafiek
-#import matplotlib.pyplot as plt
-# if using a Jupyter notebook include
-#%matplotlib inline
-
-#plt.plot(data)
-#plt.xlabel('Time (seconds)')
-#plt.ylabel('Potentiometer Reading')
-#plt.title('Potentiometer Reading vs. Time')
-#plt.show()

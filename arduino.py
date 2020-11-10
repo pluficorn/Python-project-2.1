@@ -6,10 +6,6 @@ import time
 import threading
 from datetime import timedelta
 
-# This file is meant for setting the settings. So max
-
-str = string
-
 #####################################################################################################################################
 
 class Sensor():
@@ -52,27 +48,22 @@ class Sensor():
         else:
             self.data[jaar][maand][dag] = [data]
 
+    # returnd lijst van gemiddelden gebasseerd op de periode tussen begin en eind datum (het is tot en met, dus laatste dag wordt ook gegeven)
     def return_data(self, begindatum, einddatum):
-
         b_datum = datetime.datetime(*begindatum)
         e_datum = datetime.datetime(*einddatum)
 
         verschil = e_datum - b_datum
-
-        if verschil <= 0:
-            pass
-
             # gemiddelde data per uur over 1 dag
-        if verschil.days is 1:
-
+        if verschil.days == 0:
             # bereken per uur het gemiddelde en voeg het toe aan een lijst
             l = []
             datum = self.data[b_datum.year][b_datum.month][b_datum.day]
             for uur in datum:
                 tijdstip =datum[uur]
-                l.append(sum(tijdstip)/len(tijdstip))
+                l.append((round((sum(tijdstip)/len(tijdstip))*10))/10)
 
-        elif verschil.days is 7:
+        elif verschil.days == 6:
             l = []
             # gem per dag over 1 week
             for i in range(verschil.days + 1):
@@ -87,9 +78,9 @@ class Sensor():
                     lengte += len(dagdata[uur])
 
                 # voeg het gemiddelde per dag toe aan de lijst
-                l.append(totaal/lengte)
+                l.append((round((totaal/lengte*10)))/10)
 
-        elif b_datum.month is (e_datum.month - 1) and b_datum.day is e_datum.day:
+        elif (b_datum.month == (e_datum.month - 1) and (b_datum.day == e_datum.day + 1)) or b_datum.month == e_datum.month and ((e_datum + datetime.timedelta(days=1)).month) == (b_datum.month + 1):
             l = []
             # gem per dag over 1 week
             for i in range(verschil.days + 1):
@@ -104,29 +95,46 @@ class Sensor():
                     lengte += len(dagdata[uur])
 
                 # voeg het gemiddelde per dag toe aan de lijst
-                l.append(totaal/lengte)
-        # over een volledig jaar of periodes gebasseerd op gemiddelde per maand
-        elif verschil is 365 or b_datum.day is e_datum.day and b_datum.month is not e_datum.month - 1:
+                l.append((round((totaal/lengte*10)))/10)
+
+
+        # over een volledig jaar 
+        elif verschil.days == 365:
+            l = []
+            maand = b_datum.month
+            totaal = 0
+            lengte = 0
+            # gem per dag over 1 week
             for i in range(verschil.days + 1):
                 datum = b_datum + timedelta(days=i)
-                maanddata = self.data[datum.year][datum.month]
-                totaal = 0
-                lengte = 0
-                
-                # tel alles van de maand op
-                for dag in maanddata:
-                    dagdata = maanddata[dag]
+                dagdata = self.data[datum.year][datum.month][datum.day]
+                    
+                #print(maand, datum.month)
+
+                if maand == datum.month:
+                    # tel alles van de dag op
                     for uur in dagdata:
                         totaal += sum(dagdata[uur])
                         lengte += len(dagdata[uur])
-                
-                l.append(totaal/lengte)
+                else:
+                    print("1 maand voorbij")
+                    l.append((round((totaal/lengte*10)))/10)
+                    totaal = 0
+                    lengte = 0
+                    maand = datum.month
+                    for uur in dagdata:
+                        totaal += sum(dagdata[uur])
+                        lengte += len(dagdata[uur])
+
+            l.append((round((totaal/lengte*10)))/10)
+
         else:
             # stuurt een lege lijst terug als 
             l = []
 
         return l
-
+    
+    #retourneerd de laatste lezing 
     def laatste_lezing(self):
         datum = datetime.datetime.now()
         return self.data[datum.year][datum.month][datum.day][datum.hour][-1]
