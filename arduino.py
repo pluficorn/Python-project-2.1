@@ -175,4 +175,7 @@ class Arduino():
     def set_naam(self, naam):
         self.naam = naam
 
+    def return_port(self):
+        return self.port
+
 #####################################################################################################################################

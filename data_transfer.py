@@ -37,7 +37,7 @@ def receive_info(port):
     ser.readline()
 
 # methode om de positie van de rolluik te veranderen
-def send_command(port, command):
+def command_omhoog(port, command):
     # tell arduino to turn on other light and thus 'change' the position or status of the arduino
 
     ser = serial.Serial(port, CONST_BAUT)

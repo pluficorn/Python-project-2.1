@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pandastable import Table
 
+from data_transfer import *
+from arduino import Arduino
+
 class Window(Frame):
     
     def __init__(self, master=None):
@@ -42,9 +45,9 @@ class Window(Frame):
         self.dropdown(tijdelijkeLijst, temperatuur)
         self.dropdown(tijdelijkeLijst, lichtintensiteit)
         self.dropdown(tijdelijkeLijst, rolluiken)
-        omhoogButton = Button(rolluiken, text="Omhoog", command = self.doNothing) #function placeholder
+        omhoogButton = Button(rolluiken, text="Omhoog", command = omhoog_command) #function placeholder
         omhoogButton.place(x=460, y=200)
-        omlaagButton = Button(rolluiken, text="Omlaag", command = self.doNothing) #function placeholder
+        omlaagButton = Button(rolluiken, text="Omlaag", command = omlaag_command) #function placeholder
         omlaagButton.place(x=460, y=250)
 
         #page temperatuur en lichtintensiteit
@@ -124,9 +127,6 @@ class Window(Frame):
         widget = OptionMenu(locatie, dropdown, *lijst)
         widget.pack()
 
-    def doNothing(self):
-        pass
-
     # def overzichtTable(self, locatie, dataset):
     #     total_rows = len(dataset) 
     #     total_columns = len(dataset[0]) 
@@ -151,6 +151,10 @@ rolluiken=tk.Frame(root, width=600, height=500, bg="black")
 helpmij=tk.Frame(root, width=600, height=500)
 statusoverzicht=tk.Frame(root, width=600, height=500, bg="yellow")
 helpmijtekst = "help mij nu!" #uitschrijven
+
+arduino = Arduino()
+omlaag_command = send_command(arduino.return_port(), "uitrollen")
+omhoog_command = send_command(arduino.return_port(), "oprollen")
 
 #placeholders
 tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
