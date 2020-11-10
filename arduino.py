@@ -57,9 +57,9 @@ class Sensor():
         verschil = e_datum - b_datum
 
         if verschil.days <= 0:
-            pass
+            return []
 
-            # gemiddelde data per uur over 1 dag
+        # gemiddelde data per uur over 1 dag
         if verschil.days == 1:
 
             # bereken per uur het gemiddelde en voeg het toe aan een lijst
@@ -68,7 +68,7 @@ class Sensor():
             for uur in datum:
                 tijdstip =datum[uur]
                 l.append((round((sum(tijdstip)/len(tijdstip))*10))/10)
-
+        # periode van 1 week
         elif verschil.days == 7:
             l = []
             # gem per dag over 1 week
@@ -84,29 +84,11 @@ class Sensor():
                     lengte += len(dagdata[uur])
 
                 # voeg het gemiddelde per dag toe aan de lijst
-                gem = totaal/lengte*10
-                gem.round()
                 l.append((round((totaal/lengte*10)))/10)
-
-        elif b_datum.month == (e_datum.month - 1) and b_datum.day == e_datum.day:
-            l = []
-            # gem per dag over 1 week
-            for i in range(verschil.days + 1):
-                datum = b_datum + timedelta(days=i)
-                dagdata = self.data[datum.year][datum.month][datum.day]
-                totaal = 0
-                lengte = 0
-
-                # tel alles van de dag op
-                for uur in dagdata:
-                    totaal += sum(dagdata[uur])
-                    lengte += len(dagdata[uur])
-
-                # voeg het gemiddelde per dag toe aan de lijst
-                l.append((round((totaal/lengte*10)))/10)
-
-        # over een volledig jaar of periodes gebasseerd op gemiddelde per maand
-        elif verschil.days == 365 or (b_datum.month == (e_datum.month - 1) and b_datum.day == (e_datum.day + 1)) or (b_datum.month == e_datum.month and (verschil.days == 30 or verschil.days == 31)):
+        # over een volledig jaar of een maand
+        # over een maand (andere maand, maar 1 dag eerder in volgende maand)
+        # over een maand (zelfde maan, maar 1ste en laatste dag van de maand)
+        elif verschil.days == 365 or (b_datum.month == (e_datum.month - 1) and b_datum.day == (e_datum.day + 1)) or (b_datum.month == e_datum.month and (((e_datum + datetime.timedelta(days=1)).month) == (b_datum.month + 1)) ):
             l = []
             for i in range(verschil.days +1):
                 datum = b_datum + timedelta(days=i)
@@ -122,12 +104,13 @@ class Sensor():
                         lengte += len(dagdata[uur])
                 
                 l.append((round((totaal/lengte*10)))/10)
+        # langere periodes of onlogische periodes waar we niet mee werken
         else:
-            # stuurt een lege lijst terug als 
-            l = []
+            return []
 
         return l
-
+    
+    #retourneerd de laatste lezing 
     def laatste_lezing(self):
         datum = datetime.datetime.now()
         return self.data[datum.year][datum.month][datum.day][datum.hour][-1]
