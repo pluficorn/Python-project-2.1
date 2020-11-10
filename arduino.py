@@ -55,20 +55,20 @@ class Sensor():
 
         verschil = e_datum - b_datum
 
-        if verschil <= 0:
+        if verschil.days <= 0:
             pass
 
             # gemiddelde data per uur over 1 dag
-        if verschil.days is 1:
+        if verschil.days == 1:
 
             # bereken per uur het gemiddelde en voeg het toe aan een lijst
             l = []
             datum = self.data[b_datum.year][b_datum.month][b_datum.day]
             for uur in datum:
                 tijdstip =datum[uur]
-                l.append(sum(tijdstip)/len(tijdstip))
+                l.append((round((sum(tijdstip)/len(tijdstip))*10))/10)
 
-        elif verschil.days is 7:
+        elif verschil.days == 7:
             l = []
             # gem per dag over 1 week
             for i in range(verschil.days + 1):
@@ -83,9 +83,11 @@ class Sensor():
                     lengte += len(dagdata[uur])
 
                 # voeg het gemiddelde per dag toe aan de lijst
-                l.append(totaal/lengte)
+                gem = totaal/lengte*10
+                gem.round()
+                l.append((round((totaal/lengte*10)))/10)
 
-        elif b_datum.month is (e_datum.month - 1) and b_datum.day is e_datum.day:
+        elif b_datum.month == (e_datum.month - 1) and b_datum.day == e_datum.day:
             l = []
             # gem per dag over 1 week
             for i in range(verschil.days + 1):
@@ -100,10 +102,12 @@ class Sensor():
                     lengte += len(dagdata[uur])
 
                 # voeg het gemiddelde per dag toe aan de lijst
-                l.append(totaal/lengte)
+                l.append((round((totaal/lengte*10)))/10)
+
         # over een volledig jaar of periodes gebasseerd op gemiddelde per maand
-        elif verschil is 365 or b_datum.day is e_datum.day and b_datum.month is not e_datum.month - 1:
-            for i in range(verschil.days + 1):
+        elif verschil == 365 or (b_datum.month == (e_datum.month - 1) and b_datum.day == (e_datum.day + 1)) or (b_datum.month == e_datum.month and (verschil.days == 30 or verschil.days == 31)):
+            l = []
+            for i in range(verschil.days +1):
                 datum = b_datum + timedelta(days=i)
                 maanddata = self.data[datum.year][datum.month]
                 totaal = 0
@@ -116,7 +120,7 @@ class Sensor():
                         totaal += sum(dagdata[uur])
                         lengte += len(dagdata[uur])
                 
-                l.append(totaal/lengte)
+                l.append((round((totaal/lengte*10)))/10)
         else:
             # stuurt een lege lijst terug als 
             l = []
