@@ -19,6 +19,7 @@ def check_presence(arduino_port, interval=0.1):
         myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
 
         if arduino_port not in myports:
+            print ("Arduino has been disconnected!")
             break
 
         time.sleep(interval)
