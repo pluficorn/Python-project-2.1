@@ -7,10 +7,6 @@ from pandas import DataFrame #pip install pandas
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from pandastable import Table
-
-from data_transfer import *
-from arduino import Arduino
 
 class Window(Frame):
     
@@ -20,6 +16,7 @@ class Window(Frame):
 
         menu = tk.Menu(self.master)
         self.master.config(menu=menu)
+        tree = Treeview(statusoverzicht)
 
         #adding menus
         overzicht = tk.Menu(menu, tearoff=False)
@@ -41,14 +38,35 @@ class Window(Frame):
         helpmijTekst.insert(tk.END, helpmijtekst)
 
         #rolluiken page
-        self.dropdown(tijdelijkeLijst, statusoverzicht)
         self.dropdown(tijdelijkeLijst, temperatuur)
         self.dropdown(tijdelijkeLijst, lichtintensiteit)
         self.dropdown(tijdelijkeLijst, rolluiken)
-        omhoogButton = Button(rolluiken, text="Omhoog", command = omhoog_command) #function placeholder
+        omhoogButton = Button(rolluiken, text="Omhoog", command = self.doNothing) #function placeholder
         omhoogButton.place(x=460, y=200)
-        omlaagButton = Button(rolluiken, text="Omlaag", command = omlaag_command) #function placeholder
+        omlaagButton = Button(rolluiken, text="Omlaag", command = self.doNothing) #function placeholder
         omlaagButton.place(x=460, y=250)
+
+        #define table columns
+        tree['columns'] = ("Rolluik", "Status", "Temperatuur", "Lichtintensiteit")
+        tree.column("#0", width=0, minwidth=25)
+        tree.column("Rolluik", anchor=W, width=120)
+        tree.column("Status", anchor=W, width=60)
+        tree.column("Temperatuur", anchor=W, width=120)
+        tree.column("Lichtintensiteit", anchor=W, width=160)
+
+        #create headings
+        tree.heading("#0", text="", anchor=W)
+        tree.heading("Rolluik", text="Rolluik", anchor=W)
+        tree.heading("Status", text="Status", anchor=W)
+        tree.heading("Temperatuur", text="Huidige temperatuur", anchor=W)
+        tree.heading("Lichtintensiteit", text="Huidige lichtintensiteit", anchor=W)
+
+        #add data in table
+        tree.insert(parent='', index='end', iid=0, text="", values=("Woonkamer", "Open", 20, 42))
+        tree.insert(parent='', index='end', iid=1, text="", values=("Slaapkamer", "Dicht", 46, 12))
+        
+        #pack to the screen
+        tree.pack(pady=20)
 
         #page temperatuur en lichtintensiteit
         self.lineChartTemperatuur(dataset, temperatuur)
@@ -68,6 +86,7 @@ class Window(Frame):
         #font
         myFont = TkFont.Font(family="helvetica", size=10)
         helpmijTekst.configure(font=myFont, state="disabled")
+
 
         #openen startpagina(help)
         self.openHelpmij()
@@ -127,17 +146,13 @@ class Window(Frame):
         widget = OptionMenu(locatie, dropdown, *lijst)
         widget.pack()
 
-    # def overzichtTable(self, locatie, dataset):
-    #     total_rows = len(dataset) 
-    #     total_columns = len(dataset[0]) 
-    #     for i in range(total_rows): 
-    #         for j in range(total_columns):     
-    #             self.e = Entry(root, width=20, fg='blue', 
-    #                            font=('Arial',16,'bold')) 
-                  
-    #             self.e.grid(row=i, column=j) 
-    #             self.e.insert(END, dataset[i][j])
-        
+    def doNothing(self):
+        pass
+
+    def table(self):
+        tree=ttk.Treeview(statusoverzicht)
+
+
 #create a main window
 root=tk.Tk() 
 root.title("Centrale")
@@ -152,9 +167,9 @@ helpmij=tk.Frame(root, width=600, height=500)
 statusoverzicht=tk.Frame(root, width=600, height=500, bg="yellow")
 helpmijtekst = "help mij nu!" #uitschrijven
 
-arduino = Arduino()
-omlaag_command = send_command(arduino.return_port(), "uitrollen")
-omhoog_command = send_command(arduino.return_port(), "oprollen")
+# arduino = Arduino()
+# omlaag_command = send_command(arduino.return_port(), "uitrollen")
+# omhoog_command = send_command(arduino.return_port(), "oprollen")
 
 #placeholders
 tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
