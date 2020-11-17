@@ -165,7 +165,7 @@ class Luchtvochtigheid(Sensor):
 class Arduino():
 
     # arduino is 1 item uit de lijst arduino_port uit connections
-    def __init__(self, arduino, status, *sensor):
+    def __init__(self, arduino, status, sensor):
         self.port = arduino[0]
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor
@@ -176,7 +176,7 @@ class Arduino():
     # verander de status van de arduino (of hij ingerold op uitgerold is)
     def set_status(self, position):
         
-        data_transfer.send_command(self.port, position)
+        #data_transfer.send_command(self.port, position)
         self.status = position
     
     # verander de naam

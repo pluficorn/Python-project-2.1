@@ -31,27 +31,35 @@ def get_data(port):
 
 
 # methode voor het verkrijgen van de status van de rolluik / scherm (of hij ingerold is, uitgerold, of gedeeltelijk)
-def receive_info(port):
-    # check which lamp is on on the arduino
-    ser = serial.Serial(port, CONST_BAUT)
-    ser.readline()
+# de code blijft nu constant running
+def retreive_data(port):
+    with serial.Serial(port) as ser:
+        busy = True
+        while(busy):
+            b = ser.read()
+            print (b)
+            print(int.from_bytes(b, byteorder='little'))
+            time.sleep(60)
 
 # methode om de positie van de rolluik te veranderen
-def command_omhoog(port, command):
-    # tell arduino to turn on other light and thus 'change' the position or status of the arduino
-
+def command_omhoog(port):
     ser = serial.Serial(port, CONST_BAUT)
-    if command.ascii_lowercase() == 'oprollen' or command.ascii_lowercase() == 'omhoog':
-        time.sleep(0.1)
-        ser.write(chr(0x01))
+    time.sleep(0.1)
+    ser.write(chr(0x01))
 
-    if command.ascii_lowercase() == 'uitrollen' or command.ascii_lowercase() == 'omlaag':
-        time.sleep(0.1)
-        ser.write(chr(0x02))
+def command_omlaag(port):
+    ser = serial.Serial(port, CONST_BAUT)
+    time.sleep(0.1)
+    ser.write(chr(0x02))
     
 
-def change_limiet(port, type, command):
-    pass
+def change_limiet(port, value):
+    ser = serial.Serial(port, CONST_BAUT)
+    if(value >= 0 and value < 256):
+        byte = value.to_bytes(1, 'little')
+        ser.write(byte)
+        time.sleep(0.1)
+    
     
     
 
