@@ -13,6 +13,7 @@ for ar in arduino_port:
     sensor = data_transfer.get_sensor(ar)
     if isinstance(sensor, arduino.Sensor()):
         arduinos[ar] = arduino.Arduino(ar, "onbekend", sensor)
+        data_transfer.retreive_data(arduinos[ar])
     else:
         print("deze arduino heeft geen sensor")
     
