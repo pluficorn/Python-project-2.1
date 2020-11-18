@@ -9,7 +9,14 @@ import time
 arduino_port = connections.arduino_port
 arduinos = {}
 for ar in arduino_port:
-    arduinos[ar]=(arduino.Arduino(ar, "onbekend", arduino.Temperatuursensor()))
+    # werkelijke sensor moet nog achterhaalt worden van arduino. 
+    sensor = data_transfer.get_sensor(ar)
+    if isinstance(sensor, arduino.Sensor()):
+        arduinos[ar] = arduino.Arduino(ar, "onbekend", sensor)
+    else:
+        print("deze arduino heeft geen sensor")
+    
+
 print(arduinos)
 
 # haal informatie van de schermen

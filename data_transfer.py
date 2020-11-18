@@ -2,6 +2,7 @@ import connections
 import serial.tools.list_ports
 import serial
 import time
+import arduino
 from string import ascii_lowercase
 
 # set Baut als constant
@@ -32,14 +33,57 @@ def get_data(port):
 
 # methode voor het verkrijgen van de status van de rolluik / scherm (of hij ingerold is, uitgerold, of gedeeltelijk)
 # de code blijft nu constant running
-def retreive_data(port):
-    with serial.Serial(port) as ser:
-        busy = True
-        while(busy):
-            b = ser.read()
-            print (b)
-            print(int.from_bytes(b, byteorder='little'))
-            time.sleep(60)
+def retreive_data(ar):
+    port = ar.return_port()
+    sensor = ar.return_sensor()
+    ser = serial.Serial(port, CONST_BAUT)
+    temp = 0
+    
+    past = 0    # tijd voorbij sinds laatste keer opslaan van gem
+    m = 60      # tijd in sec om gem op te slaan
+
+    # zet te tijd in seconden tussen metingen
+    if isinstance(sensor, arduino.Temperatuursensor()):
+        s = 40
+    elif isinstance(sensor, arduino.Lichtsensor()):
+        s = 30
+    # als we de sensor niet weten, lezen we elke minuut
+    else:
+        s = 60
+    
+    while(1):
+        b = ser.read()
+        value = int.from_bytes(b, byteorder='little')
+        past += s
+        # als er 1 minuut of meer voorbij is
+        if past >= m:
+            # overlap = overlap over de minuut
+            overlap = past - m
+            # aantal sec - overlap
+            x = s - overlap
+            temp += (value * x)
+            gem = value / m
+            ar.sensor.collect_data(port, gem)
+
+            # zet waardes gebasseerd op overlap
+            # met overlap worden er alvast waardes ingezet die meetellen tot het gem.
+            # bij overlap = 0 wordt alles op 0 gezet
+            past = overlap
+            temp = (value * overlap)
+
+        else:
+            # gewoon toevoegen aan temp als nog geen minuut verlopen zal zijn
+            temp += (value * s)
+        time.sleep(s)
+
+# methode gebruiken om uit te vinden welke arduino het is
+def get_sensor(ar):
+    # ar is nog geen Arduino klasse!!!
+    # lees [0] voor port
+    # lees regel om sensor te achterhalen
+    return 0
+
+
 
 # methode om de positie van de rolluik te veranderen
 def command_omhoog(port):
@@ -54,6 +98,8 @@ def command_omlaag(port):
     
 
 def change_limiet(port, value):
+    # alle data lezen en zelf gemmiddelde per minuut
+    # moet nog toegevoegd worden
     ser = serial.Serial(port, CONST_BAUT)
     if(value >= 0 and value < 256):
         byte = value.to_bytes(1, 'little')

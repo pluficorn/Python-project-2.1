@@ -19,34 +19,36 @@ class Sensor():
     # verander het bovenste limiet
     def change_max(self, value, port):
         if value != self.max and value > self.min:
-            data_transfer.change_limiet(port, 'max', value)
+            data_transfer.change_limiet(port, value)
             self.max = value
     
     # verander het onderste limiet
     def change_min(self, value, port):
         if value != self.min and value < self.max:
-            data_transfer.change_limiet(port, 'min', value)
+            data_transfer.change_limiet(port, value)
             self.min = value
 
     # verzamel de data van de arduino gebasseerd op datum
-    def collect_data(self, port):
+    def collect_data(self, port, value):
         datum = datetime.datetime.now()
         jaar = datum.year
         maand = datum.month
         dag = datum.month
-
-        data = data_transfer.get_data(port)
+        uur = datum.hour
 
         if jaar in self.data:
             if maand in self.data[jaar]:
                 if dag in self.data[jaar][maand]:
-                    self.data[jaar][maand][dag].append(data)
+                    if uur in self.data[jaar][maand][dag]:
+                        self.data[jaar][maand][dag][uur].append(value)
+                    else:
+                         self.data[jaar][maand][dag][uur] = [value]
                 else:
-                    self.data[jaar][maand][dag] = [data]
+                    self.data[jaar][maand][dag][uur] = [value]
             else:
-                self.data[jaar][maand][dag] = [data]
+                self.data[jaar][maand][dag][uur] = [value]
         else:
-            self.data[jaar][maand][dag] = [data]
+            self.data[jaar][maand][dag][uur] = [value]
 
     # returnd lijst van gemiddelden gebasseerd op de periode tussen begin en eind datum (het is tot en met, dus laatste dag wordt ook gegeven)
     def return_data(self, begindatum, einddatum):
@@ -137,7 +139,7 @@ class Sensor():
     #retourneerd de laatste lezing 
     def laatste_lezing(self):
         datum = datetime.datetime.now()
-        return self.data[datum.year][datum.month][datum.day][datum.hour][-1]
+        return self.data[datum.year][datum.month][datum.day][datum.hour][-1]  
 
 #####################################################################################################################################
 
@@ -151,13 +153,6 @@ class Lichtsensor(Sensor):
 class Temperatuursensor(Sensor):
     # Bij max gaan ze naar beneden, bij min gaan ze omhoog
     def __init__(self, max=22, min=18):
-        super().__init__(min, max)
-
-#####################################################################################################################################
-
-class Luchtvochtigheid(Sensor):
-    #bij max gaan ze naar beneden, bij min gaan ze omhoog
-    def __init__(self, max=80000, min=10000):
         super().__init__(min, max)
 
 #####################################################################################################################################
@@ -182,8 +177,13 @@ class Arduino():
     # verander de naam
     def set_naam(self, naam):
         self.naam = naam
-
     def return_port(self):
         return self.port
+
+    def return_sensor(self):
+        return self.sensor
+
+    def tuple_info(self):
+        return tuple(self.naam, self.status, self.sensor.laatste_lezing())
 
 #####################################################################################################################################
