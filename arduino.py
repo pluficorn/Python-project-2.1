@@ -173,7 +173,7 @@ class Arduino():
         data_transfer.command_omhoog(self.port)
         self.status = position
     
-    def status_omlaag(self)
+    def status_omlaag(self):
         data_transfer.command_omlaag(self.port)
         self.status = position
     
