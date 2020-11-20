@@ -17,6 +17,5 @@ for ar in arduino_port:
     else:
         print("deze arduino heeft geen sensor")
     
-
 # haal informatie van de schermen
 #Scherm = window.Window() 

@@ -7,6 +7,7 @@ from pandas import DataFrame #pip install pandas
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from arduino import *
 
 class Window(Frame):
     
@@ -87,7 +88,6 @@ class Window(Frame):
         myFont = TkFont.Font(family="helvetica", size=10)
         helpmijTekst.configure(font=myFont, state="disabled")
 
-
         #openen startpagina(help)
         self.openHelpmij()
 
@@ -150,8 +150,7 @@ class Window(Frame):
         pass
 
     def table(self):
-        tree=ttk.Treeview(statusoverzicht)
-
+        tree= Treeview(statusoverzicht)
 
 #create a main window
 root=tk.Tk() 
@@ -162,14 +161,15 @@ root.geometry('600x500')
 #variabele
 temperatuur=tk.Frame(root, width=600, height=500)
 lichtintensiteit=tk.Frame(root, width=600, height=500)
-rolluiken=tk.Frame(root, width=600, height=500, bg="black")
+rolluiken=tk.Frame(root, width=600, height=500)
 helpmij=tk.Frame(root, width=600, height=500)
-statusoverzicht=tk.Frame(root, width=600, height=500, bg="yellow")
+statusoverzicht=tk.Frame(root, width=600, height=500)
 helpmijtekst = "help mij nu!" #uitschrijven
 
-# arduino = Arduino()
-# omlaag_command = send_command(arduino.return_port(), "uitrollen")
-# omhoog_command = send_command(arduino.return_port(), "oprollen")
+#esther
+arduino = Arduino()
+omlaag_command = send_command(arduino.return_port(), "uitrollen")
+omhoog_command = send_command(arduino.return_port(), "oprollen")
 
 #placeholders
 tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
