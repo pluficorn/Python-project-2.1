@@ -169,14 +169,18 @@ class Arduino():
         time.sleep(5)
     
     # verander de status van de arduino (of hij ingerold op uitgerold is)
-    def set_status(self, position):
-        
-        #data_transfer.send_command(self.port, position)
+    def status_omhoog(self):
+        data_transfer.command_omhoog(self.port)
+        self.status = position
+    
+    def status_omlaag(self)
+        data_transfer.command_omlaag(self.port)
         self.status = position
     
     # verander de naam
     def set_naam(self, naam):
         self.naam = naam
+    
     def return_port(self):
         return self.port
 
