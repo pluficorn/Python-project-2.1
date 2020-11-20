@@ -65,11 +65,20 @@ def get_sensor(port,  mininum = 0, maximum = 0):
     b = ser.read()
     value = int.from_bytes(b, byteorder='little')
     if value == CONST_TEMP:
-        return arduino.Temperatuursensor()
+        if minimum and maximum:
+            return arduino.Temperatuursensor(maximum, mininum)
+        else:
+            return arduino.Temperatuursensor()
     elif value == CONST_LICHT:
-        return arduino.Lichtsensor()
+        if minimum and maximum:
+            return arduino.Lichtsensor(maximum, mininum)
+        else:
+            return arduino.Lichtsensor()
     else:
-        return arduino.Sensor()
+        if minimum and maximum:
+            return arduino.Sensor(maximum, mininum)
+        else:
+            return arduino.Sensor()
 
 # methode om de positie van de rolluik te veranderen
 def command_omhoog(port):

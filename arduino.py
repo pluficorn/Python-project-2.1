@@ -160,22 +160,23 @@ class Temperatuursensor(Sensor):
 class Arduino():
 
     # arduino is 1 item uit de lijst arduino_port uit connections
-    def __init__(self, arduino, status, sensor):
+    def __init__(self, arduino, sensor):
         self.port = arduino[0]
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor
         self.serial = serial.Serial(self.port, data_transfer.CONST_BAUT)
-        self.status = status
+        self.status = "omhoog"
         time.sleep(5)
+        data_transfer.retreive_data(self.port)
     
     # verander de status van de arduino (of hij ingerold op uitgerold is)
     def status_omhoog(self):
         data_transfer.command_omhoog(self.port)
-        self.status = position
+        self.status = "omhoog"
     
     def status_omlaag(self):
         data_transfer.command_omlaag(self.port)
-        self.status = position
+        self.status = "omlaag"
     
     # verander de naam
     def set_naam(self, naam):
