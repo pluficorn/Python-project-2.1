@@ -41,15 +41,16 @@ class Window(Frame):
         helpmijTekst.insert(tk.END, helpmijtekst)
 
         #rolluiken page
-        self.dropdown(tijdelijkeLijst, temperatuur)
-        self.dropdown(tijdelijkeLijst, lichtintensiteit)
-        self.dropdown(tijdelijkeLijst, rolluiken)
-        omhoogButton = Button(rolluiken, text="Omhoog", command = self.doNothing) #function placeholder
+        self.dropdown(arduinos, temperatuur)
+        self.dropdown(arduinos, lichtintensiteit)
+        self.dropdown(arduinos, rolluiken)
+
+        omhoogButton = Button(rolluiken, text="Omhoog", command = omhoog_command) #function placeholder
         omhoogButton.place(x=460, y=200)
-        omlaagButton = Button(rolluiken, text="Omlaag", command = self.doNothing) #function placeholder
+        omlaagButton = Button(rolluiken, text="Omlaag", command = omlaag_command) #function placeholder
         omlaagButton.place(x=460, y=250)
 
-        #define table columns
+        #statusoverzicht page
         tree['columns'] = ("Rolluik", "Status", "Temperatuur", "Lichtintensiteit")
         tree.column("#0", width=0, minwidth=25)
         tree.column("Rolluik", anchor=W, width=120)
@@ -57,18 +58,14 @@ class Window(Frame):
         tree.column("Temperatuur", anchor=W, width=120)
         tree.column("Lichtintensiteit", anchor=W, width=160)
 
-        #create headings
         tree.heading("#0", text="", anchor=W)
         tree.heading("Rolluik", text="Rolluik", anchor=W)
         tree.heading("Status", text="Status", anchor=W)
         tree.heading("Temperatuur", text="Huidige temperatuur", anchor=W)
         tree.heading("Lichtintensiteit", text="Huidige lichtintensiteit", anchor=W)
 
-        #add data in table
         tree.insert(parent='', index='end', iid=0, text="", values=("Woonkamer", "Open", 20, 42))
         tree.insert(parent='', index='end', iid=1, text="", values=("Slaapkamer", "Dicht", 46, 12))
-        
-        #pack to the screen
         tree.pack(pady=20)
 
         #page temperatuur en lichtintensiteit
@@ -154,8 +151,6 @@ class Window(Frame):
     def table(self):
         tree= Treeview(statusoverzicht)
 
-
-
 #create a main window
 root=tk.Tk() 
 root.title("Centrale")
@@ -197,7 +192,6 @@ omlaag_command = arduinos[0].status_omlaag()
 omhoog_command = arduinos[0].status_omhoog()
 
 #placeholders
-tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
 dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart temperatuur
          'Gemiddelde_temp': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
 dataset2 = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart lichtintensiteit
