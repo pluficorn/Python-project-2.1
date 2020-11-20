@@ -8,6 +8,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from arduino import *
+import connections
+import data_transfer
 
 class Window(Frame):
     
@@ -166,8 +168,17 @@ helpmij=tk.Frame(root, width=600, height=500)
 statusoverzicht=tk.Frame(root, width=600, height=500)
 helpmijtekst = "help mij nu!" #uitschrijven
 
-#esther
-arduino = Arduino()
+# haal de arduino in de porten op van Connections
+arduino_port = connections.arduino_port
+# lege list om de arduinos in op te slaan
+arduinos = []
+# voor elke arduino...
+for ar in arduino_port:
+    # Kijk welke sensor wordt meegegeven
+    sensor = data_transfer.get_sensor(ar)
+    # Voeg een arduino klasse Arduino toe aan de list
+    arduinos.append(Arduino(ar, sensor))
+
 omlaag_command = send_command(arduino.return_port(), "uitrollen")
 omhoog_command = send_command(arduino.return_port(), "oprollen")
 
