@@ -60,7 +60,7 @@ def retreive_data(ar):
         time.sleep(s)
 
 # methode gebruiken om uit te vinden welke arduino het is
-def get_sensor(port,  mininum = 0, maximum = 0):
+def get_sensor(port,  minimum = 0, maximum = 0):
     ser = serial.Serial(port, CONST_BAUT)
     b = ser.read()
     value = int.from_bytes(b, byteorder='little')
@@ -71,12 +71,12 @@ def get_sensor(port,  mininum = 0, maximum = 0):
             return arduino.Temperatuursensor()
     elif value == CONST_LICHT:
         if minimum and maximum:
-            return arduino.Lichtsensor(maximum, mininum)
+            return arduino.Lichtsensor(maximum, minimum)
         else:
             return arduino.Lichtsensor()
     else:
         if minimum and maximum:
-            return arduino.Sensor(maximum, mininum)
+            return arduino.Sensor(maximum, minimum)
         else:
             return arduino.Sensor()
 

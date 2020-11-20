@@ -188,13 +188,13 @@ arduinos = []
 # voor elke arduino...
 for ar in arduino_port:
     # Kijk welke sensor wordt meegegeven
-    sensor = data_transfer.get_sensor(ar)
+    sensor = data_transfer.get_sensor(ar[0])
     # Voeg een arduino klasse Arduino toe aan de list
     arduinos.append(Arduino(ar, sensor))
 
 # geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
-omlaag_command = status_omlaag()
-omhoog_command = status_omhoog()
+omlaag_command = arduinos[0].status_omlaag()
+omhoog_command = arduinos[0].status_omhoog()
 
 #placeholders
 tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
