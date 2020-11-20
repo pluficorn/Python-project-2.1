@@ -152,6 +152,8 @@ class Window(Frame):
     def table(self):
         tree= Treeview(statusoverzicht)
 
+
+
 #create a main window
 root=tk.Tk() 
 root.title("Centrale")
@@ -164,12 +166,22 @@ lichtintensiteit=tk.Frame(root, width=600, height=500)
 rolluiken=tk.Frame(root, width=600, height=500)
 helpmij=tk.Frame(root, width=600, height=500)
 statusoverzicht=tk.Frame(root, width=600, height=500)
-helpmijtekst = "help mij nu!" #uitschrijven
+
+#Help
+exittekst = "   - Exit: sluit de centrale \n"
+helptekst = "   - Help: informatie hoe de centrale werkt \n"
+rolluikenuitleg = "   - Rolluiken: wijzig de instellingen van de verschillende rolluiken \n"
+statusoverzichtuitleg = "   - Statusoverzicht: een overzicht van alle rolluiken en de huidige temperatuur en lichtintensiteit\n"
+temperatuuruitleg = "   - Temperatuur: informatie over de gemiddelde temperatuur \n"
+lichtuitleg = "   - Lichtintensiteit: informatie over de gemiddelde lichtintensiteit \n"
+meerinfo = "\nVoor meer informatie kunt u contact opnemen met 06-12345678 of mailen naar centrale@hanze.nl"
+helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent de rolluiken, hieronder volgt een korte uitleg van alle \nonderdelen binnen deze centrale: \n" 
+                + exittekst + helptekst + rolluikenuitleg + statusoverzichtuitleg + temperatuuruitleg + lichtuitleg + meerinfo)
 
 #esther
-arduino = Arduino()
-omlaag_command = send_command(arduino.return_port(), "uitrollen")
-omhoog_command = send_command(arduino.return_port(), "oprollen")
+# arduino = Arduino()
+# omlaag_command = send_command(arduino.return_port(), "uitrollen")
+# omhoog_command = send_command(arduino.return_port(), "oprollen")
 
 #placeholders
 tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
