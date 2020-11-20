@@ -171,11 +171,11 @@ class Arduino():
     # verander de status van de arduino (of hij ingerold op uitgerold is)
     def status_omhoog(self):
         data_transfer.command_omhoog(self.port)
-        self.status = position
+        self.status = "omhoog"
     
     def status_omlaag(self):
         data_transfer.command_omlaag(self.port)
-        self.status = position
+        self.status = "omlaag"
     
     # verander de naam
     def set_naam(self, naam):
