@@ -160,7 +160,6 @@ class Temperatuursensor(Sensor):
 class Arduino:
     # arduino is 1 item uit de lijst arduino_port uit connections
     def __init__(self, arduino, sensor):
-        print(4)
         self.port = str(arduino[0])
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor

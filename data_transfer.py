@@ -1,4 +1,4 @@
-import connections
+# import connections
 import serial.tools.list_ports
 import serial
 import time
@@ -61,11 +61,10 @@ def retreive_data(ar):
 
 # methode gebruiken om uit te vinden welke arduino het is
 def get_sensor(port,  minimum = 0, maximum = 0):
-    print(2)
     ser = serial.Serial(port, CONST_BAUT)
-    x = True
+    x = 1
     while(x):
-        b = ser.readline()
+        b = ser.read()
         value = int.from_bytes(b, byteorder='little')
 
         if value < CONST_SWITCH:
@@ -83,8 +82,9 @@ def get_sensor(port,  minimum = 0, maximum = 0):
                 result = arduino.Sensor(maximum, minimum)
             else:
                 result = arduino.Sensor()
-        x = False
+        x = 0
     return result
+
 # methode om de positie van de rolluik te veranderen
 def command_omhoog(port):
     ser = serial.Serial(port, CONST_BAUT)
@@ -96,7 +96,6 @@ def command_omlaag(port):
     time.sleep(0.1)
     ser.write(chr(0x02))
     
-
 def change_limiet(port, value):
     # alle data lezen en zelf gemmiddelde per minuut
     # moet nog toegevoegd worden
@@ -107,10 +106,3 @@ def change_limiet(port, value):
         time.sleep(0.1)
     
     
-    
-
-# 0X01 -- OPROLLEN
-# 0X02 -- ROLLEN
-# 0X03 -- STOP_ROLLEN
-
-# .... NOG ONBEKEND VOOR DATA VAN DE SENSOREN
