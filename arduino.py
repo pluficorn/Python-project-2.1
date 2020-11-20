@@ -8,7 +8,7 @@ from datetime import timedelta
 
 #####################################################################################################################################
 
-class Sensor():
+class Sensor:
 
     # Bij max gaan ze naar beneden, bij min gaan ze omhoog
     def __init__(self, max=999999, min=0):
@@ -157,10 +157,10 @@ class Temperatuursensor(Sensor):
 
 #####################################################################################################################################
 
-class Arduino():
-
+class Arduino:
     # arduino is 1 item uit de lijst arduino_port uit connections
     def __init__(self, arduino, sensor):
+        print(4)
         self.port = str(arduino[0])
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor

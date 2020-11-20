@@ -10,9 +10,9 @@ CONST_BAUT = 19200
 CONST_INROLLEN = "0x01"
 CONST_UITROLLEN = "0x02"
 CONST_STOPROLLEN = "0x03"
+# 0x10
 # zet waarden voor bepalen sensor
-CONST_TEMP = 30
-CONST_LICHT = 31
+CONST_SWITCH = 50
 
 # methode voor het verkrijgen van de status van de rolluik / scherm (of hij ingerold is, uitgerold, of gedeeltelijk)
 # de code blijft nu constant running
@@ -61,25 +61,30 @@ def retreive_data(ar):
 
 # methode gebruiken om uit te vinden welke arduino het is
 def get_sensor(port,  minimum = 0, maximum = 0):
+    print(2)
     ser = serial.Serial(port, CONST_BAUT)
-    b = ser.read()
-    value = int.from_bytes(b, byteorder='little')
-    if value == CONST_TEMP:
-        if minimum and maximum:
-            return arduino.Temperatuursensor(maximum, minimum)
-        else:
-            return arduino.Temperatuursensor()
-    elif value == CONST_LICHT:
-        if minimum and maximum:
-            return arduino.Lichtsensor(maximum, minimum)
-        else:
-            return arduino.Lichtsensor()
-    else:
-        if minimum and maximum:
-            return arduino.Sensor(maximum, minimum)
-        else:
-            return arduino.Sensor()
+    x = True
+    while(x):
+        b = ser.readline()
+        value = int.from_bytes(b, byteorder='little')
 
+        if value < CONST_SWITCH:
+            if minimum and maximum:
+                result = arduino.Temperatuursensor(maximum, minimum) 
+            else:
+                result = arduino.Temperatuursensor() 
+        elif value > CONST_SWITCH:
+            if minimum and maximum:
+                result = arduino.Lichtsensor(maximum, minimum)
+            else:
+                result = arduino.Lichtsensor()
+        else:
+            if minimum and maximum:
+                result = arduino.Sensor(maximum, minimum)
+            else:
+                result = arduino.Sensor()
+        x = False
+    return result
 # methode om de positie van de rolluik te veranderen
 def command_omhoog(port):
     ser = serial.Serial(port, CONST_BAUT)
