@@ -192,8 +192,9 @@ for ar in arduino_port:
     # Voeg een arduino klasse Arduino toe aan de list
     arduinos.append(Arduino(ar, sensor))
 
-omlaag_command = send_command(arduino.return_port(), "uitrollen")
-omhoog_command = send_command(arduino.return_port(), "oprollen")
+# geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
+omlaag_command = status_omlaag()
+omhoog_command = status_omhoog()
 
 #placeholders
 tijdelijkeLijst=["egg", "bunny", "chicken"] #placeholder voor dropdown
