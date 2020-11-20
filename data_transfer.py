@@ -10,6 +10,9 @@ CONST_BAUT = 19200
 CONST_INROLLEN = "0x01"
 CONST_UITROLLEN = "0x02"
 CONST_STOPROLLEN = "0x03"
+# zet waarden voor bepalen sensor
+CONST_TEMP = 30
+CONST_LICHT = 31
 
 # methode voor het verkrijgen van de status van de rolluik / scherm (of hij ingerold is, uitgerold, of gedeeltelijk)
 # de code blijft nu constant running
@@ -57,13 +60,16 @@ def retreive_data(ar):
         time.sleep(s)
 
 # methode gebruiken om uit te vinden welke arduino het is
-def get_sensor(ar):
-    # ar is nog geen Arduino klasse!!!
-    # lees [0] voor port
-    # lees regel om sensor te achterhalen
-    return 0
-
-
+def get_sensor(port,  mininum = 0, maximum = 0):
+    ser = serial.Serial(port, CONST_BAUT)
+    b = ser.read()
+    value = int.from_bytes(b, byteorder='little')
+    if value == CONST_TEMP:
+        return arduino.Temperatuursensor()
+    elif value == CONST_LICHT:
+        return arduino.Lichtsensor()
+    else:
+        return arduino.Sensor()
 
 # methode om de positie van de rolluik te veranderen
 def command_omhoog(port):
