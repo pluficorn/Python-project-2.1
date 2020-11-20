@@ -66,7 +66,7 @@ def get_sensor(port,  minimum = 0, maximum = 0):
     value = int.from_bytes(b, byteorder='little')
     if value == CONST_TEMP:
         if minimum and maximum:
-            return arduino.Temperatuursensor(maximum, mininum)
+            return arduino.Temperatuursensor(maximum, minimum)
         else:
             return arduino.Temperatuursensor()
     elif value == CONST_LICHT:

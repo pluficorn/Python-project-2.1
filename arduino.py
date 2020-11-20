@@ -167,7 +167,7 @@ class Arduino():
         self.serial = serial.Serial(self.port, data_transfer.CONST_BAUT)
         self.status = "omhoog"
         time.sleep(5)
-        data_transfer.retreive_data(self.port)
+        # data_transfer.retreive_data(self)
     
     # verander de status van de arduino (of hij ingerold op uitgerold is)
     def status_omhoog(self):

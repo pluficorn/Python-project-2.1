@@ -187,6 +187,8 @@ for ar in arduino_port:
     # Voeg een arduino klasse Arduino toe aan de list
     arduinos.append(Arduino(ar, sensor))
 
+# arduinos.append(Arduino(('COM4', 'Arduino Uno (COM4)', 'USB VID:PID=2341:0043 SER=75834303638351E03130 LOCATION=1-2'), Sensor()))
+
 # geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
 omlaag_command = arduinos[0].status_omlaag()
 omhoog_command = arduinos[0].status_omhoog()
