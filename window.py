@@ -176,17 +176,17 @@ helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent d
                 + exittekst + helptekst + rolluikenuitleg + statusoverzichtuitleg + temperatuuruitleg + lichtuitleg + meerinfo)
 
 
-# haal de arduino in de porten op van Connections
-arduino_port = connections.arduino_port
-# lege list om de arduinos in op te slaan
-arduinos = []
-# voor elke arduino...
-for ar in arduino_port:
-    # Kijk welke sensor wordt meegegeven
-    sensor = data_transfer.get_sensor(ar[0])
-    # Voeg een arduino klasse Arduino toe aan de list
-    arduinos.append(Arduino(ar, sensor))
-
+# # haal de arduino in de porten op van Connections
+# arduino_port = connections.arduino_port
+# # lege list om de arduinos in op te slaan
+# arduinos = []
+# # voor elke arduino...
+# for ar in arduino_port:
+#     # Kijk welke sensor wordt meegegeven
+#     sensor = data_transfer.get_sensor(ar[0])
+#     # Voeg een arduino klasse Arduino toe aan de list
+#     arduinos.append(Arduino(ar, sensor))
+arduinos = connections.arduinos
 # arduinos.append(Arduino(('COM4', 'Arduino Uno (COM4)', 'USB VID:PID=2341:0043 SER=75834303638351E03130 LOCATION=1-2'), Sensor()))
 
 # geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
