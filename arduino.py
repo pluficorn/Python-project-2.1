@@ -59,80 +59,83 @@ class Sensor:
             # gemiddelde data per uur over 1 dag
         if verschil.days == 0:
             # bereken per uur het gemiddelde en voeg het toe aan een lijst
-            l = []
+            l = {}
+            l["uur"] = []
+            l["gemiddelde"] = []
             datum = self.data[b_datum.year][b_datum.month][b_datum.day]
             for uur in datum:
                 tijdstip =datum[uur]
-                l.append((round((sum(tijdstip)/len(tijdstip))*10))/10)
+                l["uur"].append(uur)
+                l["gemiddelde"].append((round((sum(tijdstip)/len(tijdstip))*10))/10)
 
-        elif verschil.days == 6:
-            l = []
-            # gem per dag over 1 week
-            for i in range(verschil.days + 1):
-                datum = b_datum + timedelta(days=i)
-                dagdata = self.data[datum.year][datum.month][datum.day]
-                totaal = 0
-                lengte = 0
+        # elif verschil.days == 6:
+        #     l = {}
+        #     # gem per dag over 1 week
+        #     for i in range(verschil.days + 1):
+        #         datum = b_datum + timedelta(days=i)
+        #         dagdata = self.data[datum.year][datum.month][datum.day]
+        #         totaal = 0
+        #         lengte = 0
 
-                # tel alles van de dag op
-                for uur in dagdata:
-                    totaal = sum(dagdata[uur])
-                    lengte += len(dagdata[uur])
+        #         # tel alles van de dag op
+        #         for uur in dagdata:
+        #             totaal = sum(dagdata[uur])
+        #             lengte += len(dagdata[uur])
 
-                # voeg het gemiddelde per dag toe aan de lijst
-                l.append((round((totaal/lengte*10)))/10)
+        #         # voeg het gemiddelde per dag toe aan de lijst
+        #         l.append((round((totaal/lengte*10)))/10)
 
-        elif (b_datum.month == (e_datum.month - 1) and (b_datum.day == e_datum.day + 1)) or b_datum.month == e_datum.month and ((e_datum + datetime.timedelta(days=1)).month) == (b_datum.month + 1):
-            l = []
-            # gem per dag over 1 week
-            for i in range(verschil.days + 1):
-                datum = b_datum + timedelta(days=i)
-                dagdata = self.data[datum.year][datum.month][datum.day]
-                totaal = 0
-                lengte = 0
+        # elif (b_datum.month == (e_datum.month - 1) and (b_datum.day == e_datum.day + 1)) or b_datum.month == e_datum.month and ((e_datum + datetime.timedelta(days=1)).month) == (b_datum.month + 1):
+        #     l = []
+        #     # gem per dag over 1 week
+        #     for i in range(verschil.days + 1):
+        #         datum = b_datum + timedelta(days=i)
+        #         dagdata = self.data[datum.year][datum.month][datum.day]
+        #         totaal = 0
+        #         lengte = 0
 
-                # tel alles van de dag op
-                for uur in dagdata:
-                    totaal += sum(dagdata[uur])
-                    lengte += len(dagdata[uur])
+        #         # tel alles van de dag op
+        #         for uur in dagdata:
+        #             totaal += sum(dagdata[uur])
+        #             lengte += len(dagdata[uur])
 
-                # voeg het gemiddelde per dag toe aan de lijst
-                l.append((round((totaal/lengte*10)))/10)
+        #         # voeg het gemiddelde per dag toe aan de lijst
+        #         l.append((round((totaal/lengte*10)))/10)
 
 
-        # over een volledig jaar 
-        elif verschil.days == 365:
-            l = []
-            maand = b_datum.month
-            totaal = 0
-            lengte = 0
-            # gem per dag over 1 week
-            for i in range(verschil.days + 1):
-                datum = b_datum + timedelta(days=i)
-                dagdata = self.data[datum.year][datum.month][datum.day]
+        # # over een volledig jaar 
+        # elif verschil.days == 365:
+        #     l = []
+        #     maand = b_datum.month
+        #     totaal = 0
+        #     lengte = 0
+        #     # gem per dag over 1 week
+        #     for i in range(verschil.days + 1):
+        #         datum = b_datum + timedelta(days=i)
+        #         dagdata = self.data[datum.year][datum.month][datum.day]
                     
-                #print(maand, datum.month)
+        #         #print(maand, datum.month)
 
-                if maand == datum.month:
-                    # tel alles van de dag op
-                    for uur in dagdata:
-                        totaal += sum(dagdata[uur])
-                        lengte += len(dagdata[uur])
-                else:
-                    print("1 maand voorbij")
-                    l.append((round((totaal/lengte*10)))/10)
-                    totaal = 0
-                    lengte = 0
-                    maand = datum.month
-                    for uur in dagdata:
-                        totaal += sum(dagdata[uur])
-                        lengte += len(dagdata[uur])
+        #         if maand == datum.month:
+        #             # tel alles van de dag op
+        #             for uur in dagdata:
+        #                 totaal += sum(dagdata[uur])
+        #                 lengte += len(dagdata[uur])
+        #         else:
+        #             print("1 maand voorbij")
+        #             l.append((round((totaal/lengte*10)))/10)
+        #             totaal = 0
+        #             lengte = 0
+        #             maand = datum.month
+        #             for uur in dagdata:
+        #                 totaal += sum(dagdata[uur])
+        #                 lengte += len(dagdata[uur])
 
-            l.append((round((totaal/lengte*10)))/10)
+        #     l.append((round((totaal/lengte*10)))/10)
 
         else:
             # stuurt een lege lijst terug als 
-            l = []
+            l = {}
 
         return l
     
