@@ -18,14 +18,8 @@ CONST_SWITCH = 50
 # de code blijft nu constant running
 # redo code tomorrow
 def retreive_data(ar):
-    port = ar.return_port()
-    sensor = ar.return_sensor()
-    ser = ar.serial
-    temp = 0
-    
-    past = 0    # tijd voorbij sinds laatste keer opslaan van gem
-    m = 60      # tijd in sec om gem op te slaan
-    s = 60
+    # past = 0    # tijd voorbij sinds laatste keer opslaan van gem
+    # m = 60      # tijd in sec om gem op te slaan
 
     # # zet te tijd in seconden tussen metingen
     # if isinstance(type(sensor), arduino.Temperatuursensor()):
@@ -35,11 +29,20 @@ def retreive_data(ar):
     # # als we de sensor niet weten, lezen we elke minuut
     # else:
     #     s = 60
+    port = ar.return_port()
+    sensor = ar.return_sensor()
+    ser = ar.serial
+    temp = 0
+    s = 60
+    #   
+    
     
     while(1):
         b = ser.read()
         value = int.from_bytes(b, byteorder='little')
-        
+        ar.sensor.collect_data(port, value)
+        time.sleep(s)
+
         # past += s
         # # als er 1 minuut of meer voorbij is
         # if past >= m:
@@ -60,9 +63,6 @@ def retreive_data(ar):
         # else:
         #     # gewoon toevoegen aan temp als nog geen minuut verlopen zal zijn
         #     temp += (value * s)
-
-        ar.sensor.collect_data(port, gem)
-        time.sleep(s)
         
 # methode gebruiken om uit te vinden welke arduino het is
 def get_sensor(port,  minimum = 0, maximum = 0):
@@ -105,7 +105,23 @@ def command_omlaag(ar):
     b = v.to_bytes(1, 'little')
     ser.write(v)
     
-def change_limiet(ar, value):
+# To be worked on !!!!!
+def change_lower_limiet(ar, value):
+    # alle data lezen en zelf gemmiddelde per minuut
+    # moet nog toegevoegd worden
+    ser = ar.serial
+    sensor = ar.sensor()
+
+    if(value >= 0 and value < 256):
+        byte = value.to_bytes(1, 'little')
+        ser.write(byte)
+        time.sleep(0.1)
+
+# 0x0A, opgevolgd met een nummer van -128-127 (signed byte): minimumtemperatuur
+# 0x0B, opgevolgd met een nummer van 0-255 (unsigned byte): minimumlichteenheid
+# 0x0C, opgevolgd met een nummer van 2-255 (unsigned byte): minimumuitrolafstand
+
+def change_higher_limiet(ar, value):
     # alle data lezen en zelf gemmiddelde per minuut
     # moet nog toegevoegd worden
     ser = ar.serial
@@ -114,4 +130,6 @@ def change_limiet(ar, value):
         ser.write(byte)
         time.sleep(0.1)
 
-    
+# 0x07, opgevolgd met een nummer van -128-127 (signed byte): maximumtemperatuur
+# 0x08, opgevolgd met een nummer van 0-255 (unsigned byte): maximumlichteenheid
+# 0x09, opgevolgd met een nummer van 2-255 (unsigned byte): maximumuitrolafstand

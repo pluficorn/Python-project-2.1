@@ -27,8 +27,8 @@ arduinos = []
 for ar in arduino_port:
     # Kijk welke sensor wordt meegegeven
     sensor = data_transfer.get_sensor(ar[0])
-    print (sensor)
+    # print (sensor)
     # Voeg een arduino klasse Arduino toe aan de list
     arduinos.append(Arduino(ar, sensor))
 
-print (arduinos)
+# print (arduinos)

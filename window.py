@@ -171,7 +171,7 @@ omlaag_command = arduinos[0].status_omlaag()
 omhoog_command = arduinos[0].status_omhoog()
 
 #variabele
-dataset = Sensor.return_data(datetime.now, datetime.now)
+dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
 # dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart temperatuur
 #          'Gemiddelde_temp': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
 # dataset2 = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart lichtintensiteit
