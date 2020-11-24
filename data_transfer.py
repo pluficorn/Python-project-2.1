@@ -7,62 +7,46 @@ from string import ascii_lowercase
 
 # set const
 CONST_BAUT = 19200
-CONST_INROLLEN = "0x01"
-CONST_UITROLLEN = "0x02"
-CONST_STOPROLLEN = "0x03"
-CONST_MAX_TEMP_CHANGE = "0x07"
-CONST_MAX_LICHT_CHANGE = "0x08"
-CONST_MAX_ROLLOUT_CHANGE = "0x09"
-CONST_MIN_TEMP_CHANGE = "0x0A"
-CONST_MIN_LICHT_CHANGE = "0x0B"
-CONST_MIN_ROLLOUT_CHANGE = "0x0C"
+CONST_INROLLEN = 0x01
+CONST_UITROLLEN = 0x02
+CONST_STOPROLLEN = 0x03
+CONST_TEMP_SENSOR = 0x04
+CONST_LICHT_SENSOR = 0x05
+CONST_MAX_TEMP_CHANGE = 0x07
+CONST_MAX_LICHT_CHANGE = 0x08
+CONST_MAX_ROLLOUT_CHANGE = 0x09
+CONST_MIN_TEMP_CHANGE = 0x0A
+CONST_MIN_LICHT_CHANGE = 0x0B
+CONST_MIN_ROLLOUT_CHANGE = 0x0C
 CONST_SLEEP = 3
 
 # weet zo niet waar deze voor is
 CONST_SWITCH = 50
 
 # # Data ophalen en opslaan
-# def retreive_data(ar):
-#     port = ar.return_port()
-#     ser = ar.serial
-#     sensor = ar.sensor
-#     s = 60
-#     if sensor == Lichtsensor():
-#         sign = False
-#     else:
-#         sign = True
+def retreive_data(ar):
+    port = ar.return_port()
+    ser = ar.serial
+    sensor = ar.sensor
+    s = 60
+    if sensor == Lichtsensor():
+        sign = False
+    else:
+        sign = True
 
-#     while(1):
-#         b = ser.read()
-#         value = int.from_bytes(b, byteorder='little', signed=sign)
-#         ar.sensor.collect_data(port, value)
-#         time.sleep(s)
-
-# methode gebruiken om uit te vinden welke arduino het is
-def get_sensor(port,  minimum = 0, maximum = 0):
-    ser = serial.Serial(port, CONST_BAUT)
-    x = 1
-    while(x):
+    while(1):
         b = ser.read()
-        value = int.from_bytes(b, byteorder='little')
+        value = int.from_bytes(b, byteorder='little', signed=sign)
+        ar.sensor.collect_data(port, value)
+        time.sleep(s)
 
-        if value < CONST_SWITCH:
-            if minimum and maximum:
-                result = Temperatuursensor(maximum, minimum) 
-            else:
-                result = Temperatuursensor() 
-        elif value > CONST_SWITCH:
-            if minimum and maximum:
-                result = Lichtsensor(maximum, minimum)
-            else:
-                result = Lichtsensor()
-        else:
-            if minimum and maximum:
-                result = Sensor(maximum, minimum)
-            else:
-                result = Sensor()
-        x = 0
-    return result
+def send_sensor(ar):
+    sensor = ar.sensor
+    ser = ar.serial
+    if isinstance(sensor, Temperatuursensor):
+        ser.write(CONST_TEMP_SENSOR)
+    else:
+        ser.write(CONST_LICHT_SENSOR)
 
 # Command om op te rollen
 def command_omhoog(ar):

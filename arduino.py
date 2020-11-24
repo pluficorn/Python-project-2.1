@@ -66,8 +66,8 @@ class Sensor:
 
     # returnd lijst van gemiddelden gebasseerd op de periode tussen begin en eind datum (het is tot en met, dus laatste dag wordt ook gegeven)
     def return_data(self, begindatum, einddatum):
-        b_datum = datetime.datetime(*begindatum)
-        e_datum = datetime.datetime(*einddatum)
+        b_datum = begindatum
+        e_datum = einddatum
 
         verschil = e_datum - b_datum
             # gemiddelde data per uur over 1 dag

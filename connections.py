@@ -14,8 +14,11 @@ CONST_COM6 = "COM6"
 # Zet in deze lijst alle coms met een arduino verbonden
 ports = input("Give the COMs with ',' between the different COMs: ")
 ports_list = ports.split(",")
-
 arduino_ports = [i.upper() for i in ports_list]
+
+# # hardcoded
+# arduino_ports = [CONST_COM4]
+
 
 # https://en.it1352.com/article/1940209.html
 # in cmd: pip3 install pyserial
@@ -29,9 +32,19 @@ arduinos = []
 # voor elke arduino...
 for ar in arduino_port:
     # Kijk welke sensor wordt meegegeven
-    sensor = data_transfer.get_sensor(ar[0])
-    # print (sensor)
+    #sensor = data_transfer.get_sensor(ar[0])
+    i = input("give 'T' for temperaturesensor, give 'L' for lightsensor: ")
+    if i.upper() == 'T':
+        sensor = Temperatuursensor()
+
+    else:
+        sensor = Lichtsensor()
+
     # Voeg een arduino klasse Arduino toe aan de list
     arduinos.append(Arduino(ar, sensor))
+    data_transfer.send_sensor(ar)
+
+    # Add data reading method to threading (so it runs in the background)
+    threading.Thread(target = data_transfer.retreive_data(ar)).start()
 
 # print (arduinos)
