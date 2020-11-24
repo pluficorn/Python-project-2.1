@@ -12,7 +12,10 @@ CONST_COM5 = "COM5"
 CONST_COM6 = "COM6"
 
 # Zet in deze lijst alle coms met een arduino verbonden
-arduino_ports = [CONST_COM4]
+ports = input("Give the COMs with ',' between the different COMs: ")
+ports_list = ports.split(",")
+
+arduino_ports = [i.upper() for i in ports_list]
 
 # https://en.it1352.com/article/1940209.html
 # in cmd: pip3 install pyserial

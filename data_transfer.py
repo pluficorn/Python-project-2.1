@@ -16,24 +16,65 @@ CONST_MAX_ROLLOUT_CHANGE = "0x09"
 CONST_MIN_TEMP_CHANGE = "0x0A"
 CONST_MIN_LICHT_CHANGE = "0x0B"
 CONST_MIN_ROLLOUT_CHANGE = "0x0C"
-CONST_SLEEP = 1
+CONST_SLEEP = 3
 
 # weet zo niet waar deze voor is
 CONST_SWITCH = 50
 
-# methode voor het verkrijgen van de status van de rolluik / scherm (of hij ingerold is, uitgerold, of gedeeltelijk)
-# de code blijft nu constant running
-# redo code tomorrow
-def retreive_data(ar):
-    pass
-# methode om de positie van de rolluik te veranderen
-def command_omhoog(ar):
-    pass
+# # Data ophalen en opslaan
+# def retreive_data(ar):
+#     port = ar.return_port()
+#     ser = ar.serial
+#     sensor = ar.sensor
+#     s = 60
+#     if sensor == Lichtsensor():
+#         sign = False
+#     else:
+#         sign = True
 
+#     while(1):
+#         b = ser.read()
+#         value = int.from_bytes(b, byteorder='little', signed=sign)
+#         ar.sensor.collect_data(port, value)
+#         time.sleep(s)
+
+# methode gebruiken om uit te vinden welke arduino het is
+def get_sensor(port,  minimum = 0, maximum = 0):
+    ser = serial.Serial(port, CONST_BAUT)
+    x = 1
+    while(x):
+        b = ser.read()
+        value = int.from_bytes(b, byteorder='little')
+
+        if value < CONST_SWITCH:
+            if minimum and maximum:
+                result = Temperatuursensor(maximum, minimum) 
+            else:
+                result = Temperatuursensor() 
+        elif value > CONST_SWITCH:
+            if minimum and maximum:
+                result = Lichtsensor(maximum, minimum)
+            else:
+                result = Lichtsensor()
+        else:
+            if minimum and maximum:
+                result = Sensor(maximum, minimum)
+            else:
+                result = Sensor()
+        x = 0
+    return result
+
+# Command om op te rollen
+def command_omhoog(ar):
+    ser = ar.serial
+    ser.write(CONST_STOPROLLEN)
+
+# Command om uit te rollen
 def command_omlaag(ar):
-    pass
-    
-# To be worked on !!!!!
+    ser = ar.serial
+    ser.write(CONST_UITROLLEN)
+
+# Command to change lower limit for temp & light sensors 
 def change_lower_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor()
@@ -62,7 +103,7 @@ def change_lower_limiet(ar, value):
     except ValueError as ve:
             print(ve)
 
-
+# Command to change higher limit for temp & light sensors 
 def change_higher_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor()
@@ -91,7 +132,32 @@ def change_higher_limiet(ar, value):
     except ValueError as ve:
             print(ve)  
 
+def change_lower_rollout(ar, value):
+    ser = ar.serial
+    try:
+        # 0x0C, opgevolgd met een nummer van 2-255 (unsigned byte): minimumuitrolafstand
+        # check waarde voor adruino
+        if value < 0 or value > 255:
+            raise ValueError("The value has to be between 0 and 255.")
 
+        b = value.to_bytes(1, 'little', signed=False)
+        ser.write(CONST_MIN_ROLLOUT_CHANGE)
+        time.sleep(CONST_SLEEP)
+        ser.write(b)
+    except ValueError as ve:
+            print(ve)
 
-# 0x09, opgevolgd met een nummer van 2-255 (unsigned byte): maximumuitrolafstand
-# 0x0C, opgevolgd met een nummer van 2-255 (unsigned byte): minimumuitrolafstand
+def change_higher_rollout(ar, value):
+    ser = ar.serial
+    try:
+        # 0x09, opgevolgd met een nummer van 2-255 (unsigned byte): maximumuitrolafstand
+        # check waarde voor adruino
+        if value < 0 or value > 255:
+            raise ValueError("The value has to be between 0 and 255.")
+
+        b = value.to_bytes(1, 'little', signed=False)
+        ser.write(CONST_MAX_ROLLOUT_CHANGE)
+        time.sleep(CONST_SLEEP)
+        ser.write(b)
+    except ValueError as ve:
+            print(ve)
