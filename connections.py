@@ -42,7 +42,7 @@ for ar in arduino_port:
 
     # Voeg een arduino klasse Arduino toe aan de list
     arduinos.append(Arduino(ar, sensor))
-    data_transfer.send_sensor(ar)
+    data_transfer.send_sensor(arduinos[-1])
 
     # Add data reading method to threading (so it runs in the background)
     threading.Thread(target = data_transfer.retreive_data(ar)).start()

@@ -43,10 +43,12 @@ def retreive_data(ar):
 def send_sensor(ar):
     sensor = ar.sensor
     ser = ar.serial
-    if isinstance(sensor, Temperatuursensor):
+
+    if isinstance(sensor, Temperatuursensor()):
         ser.write(CONST_TEMP_SENSOR)
     else:
         ser.write(CONST_LICHT_SENSOR)
+
 
 # Command om op te rollen
 def command_omhoog(ar):
