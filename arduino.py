@@ -19,13 +19,13 @@ class Sensor:
     # verander het bovenste limiet
     def change_max(self, value, port):
         if value != self.max and value > self.min:
-            data_transfer.change_limiet(port, value)
+            data_transfer.change_higher_limiet(port, value)
             self.max = value
     
     # verander het onderste limiet
     def change_min(self, value, port):
         if value != self.min and value < self.max:
-            data_transfer.change_limiet(port, value)
+            data_transfer.change_lower_limiet(port, value)
             self.min = value
 
     # verzamel de data van de arduino gebasseerd op datum
