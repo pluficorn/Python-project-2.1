@@ -34,17 +34,23 @@ for ar in arduino_port:
     # Kijk welke sensor wordt meegegeven
     #sensor = data_transfer.get_sensor(ar[0])
     i = input("give 'T' for temperaturesensor, give 'L' for lightsensor: ")
-    if i.upper() == 'T':
-        sensor = Temperatuursensor()
+    try:
+        if i.upper() == 'T':
+            sensor = Temperatuursensor()
 
-    else:
-        sensor = Lichtsensor()
-
+        elif i.upper() == 'L':
+            sensor = Lichtsensor()
+        else:
+            raise ValueError("we don't have that sensor, use 'T' or 'L' to appoint a sensor")
+    except ValueError as ve:
+        print (ve)
+        
     # Voeg een arduino klasse Arduino toe aan de list
     arduinos.append(Arduino(ar, sensor))
-    data_transfer.send_sensor(arduinos[-1])
+    current = arduinos[-1]
+    data_transfer.send_sensor(current)
 
     # Add data reading method to threading (so it runs in the background)
-    threading.Thread(target = data_transfer.retreive_data(ar)).start()
+    threading.Thread(target = data_transfer.retreive_data(current)).start()
 
-# print (arduinos)
+print(1)
