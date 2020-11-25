@@ -18,8 +18,6 @@ CONST_MAX_ROLLOUT_CHANGE = 0x09
 CONST_MIN_TEMP_CHANGE = 0x0A
 CONST_MIN_LICHT_CHANGE = 0x0B
 CONST_MIN_ROLLOUT_CHANGE = 0x0C
-CONST_COMMAND = 0x0E
-
 CONST_SLEEP = 3
 
 # weet zo niet waar deze voor is
@@ -54,15 +52,11 @@ def send_sensor(ar):
 # Command om op te rollen
 def command_omhoog(ar):
     ser = ar.serial
-    ser.write(CONST_COMMAND)
-    time.sleep(CONST_SLEEP)
     ser.write(CONST_STOPROLLEN)
 
 # Command om uit te rollen
 def command_omlaag(ar):
     ser = ar.serial
-    ser.write(CONST_COMMAND)
-    time.sleep(CONST_SLEEP)
     ser.write(CONST_UITROLLEN)
 
 # Command to change lower limit for temp & light sensors 
