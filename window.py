@@ -166,29 +166,32 @@ helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent d
 arduinos = connections.arduinos
 
 # geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
+if tk.Frame == rolluiken:
+    if dropdown.SelectedValue==arduinos[0]:
+        omlaag_command = arduinos[0].status_omlaag()
+        omhoog_command = arduinos[0].status_omhoog()
+    else:
+        omlaag_command = arduinos[1].status_omlaag()
+        omhoog_command = arduinos[1].status_omhoog()
 
-if GUI.Frame == rolluiken:
-    for i in curselection.dropdown():
-        if arduinos[i]:
-            omlaag_command = arduinos[i].status_omlaag()
-            omhoog_command = arduinos[i].status_omhoog()
-elif GUI.Frame == lichtintensiteit: 
-    for i in curselection.dropdown():
-        if arduinos[i]:
-            dataset = arduinos[i].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-elif GUI.Frame == temperatuur: 
-    for i in curselection.dropdown():
-        if arduinos[i]:
-            dataset = arduinos[i].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+elif tk.Frame == lichtintensiteit: 
+    if dropdown.SelectedValue==arduinos[0]:
+        dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+    else:
+        dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+        
+elif tk.Frame == temperatuur: 
+    if dropdown.SelectedValue==arduinos[0]:
+        dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+    else:
+        dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
 
 # omlaag_command = arduinos[0].status_omlaag()
 # omhoog_command = arduinos[0].status_omhoog()
 
 #variabele
-
 #dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
 dropdown = StringVar(rolluiken)
-
 
 lichtdata = {'uur': [], #placeholder voor linechart temperatuur
          'gemiddelde': []}  
@@ -201,9 +204,6 @@ for ar in arduinos:
         tempdata = ar.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
     elif isinstance(ar.sensor, type(arduino.Lichtsensor())):
         lichtdata = ar.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-
-# dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-dropdown = StringVar(rolluiken)
 
 #tijdelijke  = ["arduino2", "arduino1"]
 
