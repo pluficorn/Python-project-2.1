@@ -2,7 +2,7 @@ import serial.tools.list_ports
 import time
 import threading
 import data_transfer
-from arduino import *
+import arduino
 
 CONST_COM1 = "COM1"
 CONST_COM2 = "COM2"
@@ -37,17 +37,17 @@ for ar in arduino_port:
     i = input("give 'T' for temperaturesensor, give 'L' for lightsensor: ")
     try:
         if i.upper() == 'T':
-            sensor = Temperatuursensor()
+            sensor = arduino.Temperatuursensor()
 
         elif i.upper() == 'L':
-            sensor = Lichtsensor()
+            sensor = arduino.Lichtsensor()
         else:
             raise ValueError("we don't have that sensor, use 'T' or 'L' to appoint a sensor")
     except ValueError as ve:
         print (ve)
         
     # Voeg een arduino klasse Arduino toe aan de list
-    arduinos.append(Arduino(ar, sensor))
+    arduinos.append(arduino.Arduino(ar, sensor))
     current = arduinos[-1]
     data_transfer.send_sensor(current)
     # Add data reading method to threading (so it runs in the background)
