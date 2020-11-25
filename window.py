@@ -63,9 +63,8 @@ class Window(Frame):
         tree.heading("Status", text="Status", anchor=W)
         tree.heading("Laatste meting", text="Laatste meting", anchor=W)
 
-        tree.insert(parent='', index='end', iid=0, text="", values=("Woonkamer", "Open", 20)) #placeholder values
-        tree.insert(parent='', index='end', iid=1, text="", values=("Slaapkamer", "Dicht", 46)) #placeholder values
-        tree.pack(pady=20)
+        tree.insert(parent='', index='end', iid=0, text="", values= arduinos[0].tuple_info) 
+        tree.insert(parent='', index='end', iid=1, text="", values= arduinos[1].tuple_info) 
 
         #linechart
         self.lineChartTemperatuur(dataset, temperatuur)
@@ -167,18 +166,28 @@ helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent d
 arduinos = connections.arduinos
 
 # geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
-omlaag_command = arduinos[0].status_omlaag()
-omhoog_command = arduinos[0].status_omhoog()
+
+if self.Frame == rolluiken:
+    for i in curselection.dropdown():
+        if arduinos[i]:
+            omlaag_command = arduinos[i].status_omlaag()
+            omhoog_command = arduinos[i].status_omhoog()
+elif self.Frame = lichtintensiteit: 
+    for i in curselection.dropdown():
+        if arduinos[i]:
+            dataset = arduinos[i].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+elif self.Frame == temperatuur: 
+    for i in curselection.dropdown():
+        if arduinos[i]:
+            dataset = arduinos[i].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+
+# omlaag_command = arduinos[0].status_omlaag()
+# omhoog_command = arduinos[0].status_omhoog()
 
 #variabele
-dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+#dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
 dropdown = StringVar(rolluiken)
-# dataset = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart temperatuur
-#          'Gemiddelde_temp': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
-# dataset2 = {'Dag': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010], #placeholder voor linechart lichtintensiteit
-#          'Gemiddelde_licht': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]}  
-#tijdelijke  = ["arduino2", "arduino1"]
 
 #class aanroepen/instellen + start window
 GUI=Window(root)
-root.mainloop()     
+root.mainloop()         
