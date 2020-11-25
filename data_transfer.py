@@ -25,7 +25,6 @@ CONST_SWITCH = 50
 
 # # Data ophalen en opslaan
 def retreive_data(ar):
-    port = ar.port
     ser = ar.serial
     sensor = ar.sensor
     s = 60
@@ -38,18 +37,17 @@ def retreive_data(ar):
         b = ser.read()
         value = int.from_bytes(b, byteorder='little', signed=sign)
         ar.sensor.collect_data(value)
+        print()
         time.sleep(s)
 
 def send_sensor(ar):
     sensor = ar.sensor
     ser = ar.serial
-    # ser.write(CONST_TEMP_SENSOR)
 
     if isinstance(sensor, type(arduino.Temperatuursensor())):
         ser.write(CONST_TEMP_SENSOR)
     else:
         ser.write(CONST_LICHT_SENSOR)
-
 
 # Command om op te rollen
 def command_omhoog(ar):
