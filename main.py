@@ -7,4 +7,4 @@ import time
 
     
 # haal informatie van de schermen
-Scherm = window.Window() 
+    Scherm = window.Window() 
