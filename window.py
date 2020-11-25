@@ -46,9 +46,9 @@ class Window(Frame):
         self.dropdown(arduinos, lichtintensiteit)
         self.dropdown(arduinos, rolluiken)
 
-        omhoogButton = Button(rolluiken, text="Omhoog", command = omhoog_command )
+        omhoogButton = Button(rolluiken, text="Omhoog", command = ifthen)
         omhoogButton.place(x=460, y=200)
-        omlaagButton = Button(rolluiken, text="Omlaag", command = omlaag_command)
+        omlaagButton = Button(rolluiken, text="Omlaag", command = ifthen)
         omlaagButton.place(x=460, y=250)
 
         #statusoverzicht page
@@ -166,25 +166,26 @@ helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent d
 arduinos = connections.arduinos
 
 # geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
-if tk.Frame == rolluiken:
-    if dropdown.SelectedValue==arduinos[0]:
-        omlaag_command = arduinos[0].status_omlaag()
-        omhoog_command = arduinos[0].status_omhoog()
-    else:
-        omlaag_command = arduinos[1].status_omlaag()
-        omhoog_command = arduinos[1].status_omhoog()
+def ifthen():
+    if tk.Frame == rolluiken:
+        if dropdown.SelectedValue==arduinos[0]:
+            omlaag_command = arduinos[0].status_omlaag()
+            omhoog_command = arduinos[0].status_omhoog()
+        else:
+            omlaag_command = arduinos[1].status_omlaag()
+            omhoog_command = arduinos[1].status_omhoog()
 
-elif tk.Frame == lichtintensiteit: 
-    if dropdown.SelectedValue==arduinos[0]:
-        dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-    else:
-        dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-        
-elif tk.Frame == temperatuur: 
-    if dropdown.SelectedValue==arduinos[0]:
-        dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-    else:
-        dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+    elif tk.Frame == lichtintensiteit: 
+        if dropdown.SelectedValue==arduinos[0]:
+            dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+        else:
+            dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+
+    elif tk.Frame == temperatuur: 
+        if dropdown.SelectedValue==arduinos[0]:
+            dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+        else:
+            dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
 
 # omlaag_command = arduinos[0].status_omlaag()
 # omhoog_command = arduinos[0].status_omhoog()
