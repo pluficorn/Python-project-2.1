@@ -2,7 +2,7 @@
 import serial.tools.list_ports
 import serial
 import time
-from arduino import *
+import arduino
 from string import ascii_lowercase
 
 # set const
@@ -29,7 +29,7 @@ def retreive_data(ar):
     ser = ar.serial
     sensor = ar.sensor
     s = 60
-    if isinstance(sensor, type(Lichtsensor())):
+    if isinstance(sensor, type(arduino.Lichtsensor())):
         sign = False
     else:
         sign = True
@@ -37,7 +37,7 @@ def retreive_data(ar):
     while(1):
         b = ser.read()
         value = int.from_bytes(b, byteorder='little', signed=sign)
-        ar.sensor.collect_data(port, value)
+        ar.sensor.collect_data(value)
         time.sleep(s)
 
 def send_sensor(ar):
@@ -45,7 +45,7 @@ def send_sensor(ar):
     ser = ar.serial
     # ser.write(CONST_TEMP_SENSOR)
 
-    if isinstance(sensor, type(Temperatuursensor())):
+    if isinstance(sensor, type(arduino.Temperatuursensor())):
         ser.write(CONST_TEMP_SENSOR)
     else:
         ser.write(CONST_LICHT_SENSOR)
@@ -66,7 +66,7 @@ def change_lower_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor()
     try:
-        if isinstance(sensor, type(Temperatuursensor())):
+        if isinstance(sensor, type(arduino.Temperatuursensor())):
             # 0x0A, opgevolgd met een nummer van -128-127 (signed byte): minimumtemperatuur
             # check if value is between values for arduino code
             if value < -128 or value > 127:
@@ -77,7 +77,7 @@ def change_lower_limiet(ar, value):
             time.sleep(CONST_SLEEP)
             ser.write(b)
 
-        elif isinstance(sensor, type(Lichtsensor())):
+        elif isinstance(sensor, type(arduino.Lichtsensor())):
             # 0x0B, opgevolgd met een nummer van 0-255 (unsigned byte): minimumlichteenheid
             # check waarde voor adruino
             if value < 0 or value > 255:
@@ -95,7 +95,7 @@ def change_higher_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor()
     try:
-        if isinstance(sensor, type(Temperatuursensor())):
+        if isinstance(sensor, type(arduino.Temperatuursensor())):
             # 0x07, opgevolgd met een nummer van -128-127 (signed byte): maximumtemperatuur
             # check if value is between values for arduino code
             if value < -128 or value > 127:
@@ -106,7 +106,7 @@ def change_higher_limiet(ar, value):
             time.sleep(CONST_SLEEP)
             ser.write(b)
 
-        elif isinstance(sensor, type(Lichtsensor())):
+        elif isinstance(sensor, type(arduino.Lichtsensor())):
             # 0x08, opgevolgd met een nummer van 0-255 (unsigned byte): maximumlichteenheid
             # check value for arduino
             if value < 0 or value > 255:
