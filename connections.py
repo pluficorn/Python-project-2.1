@@ -29,6 +29,7 @@ arduino_port = [port for port in myports if port[0] in arduino_ports]
 
 # lege list om de arduinos in op te slaan
 arduinos = []
+threads = []
 # voor elke arduino...
 for ar in arduino_port:
     # Kijk welke sensor wordt meegegeven
@@ -49,8 +50,10 @@ for ar in arduino_port:
     arduinos.append(Arduino(ar, sensor))
     current = arduinos[-1]
     data_transfer.send_sensor(current)
-
+    print(1)
     # Add data reading method to threading (so it runs in the background)
-    threading.Thread(target = data_transfer.retreive_data(current)).start()
+    t = threading.Thread(target=data_transfer.retreive_data, args= [current])
+    t.start()
+    threads.append(t)
 
-print(1)
+print(9)
