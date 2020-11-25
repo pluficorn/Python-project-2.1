@@ -7,7 +7,7 @@ from pandas import DataFrame #pip install pandas
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from arduino import *
+import arduino
 import connections
 import data_transfer
 import datetime
@@ -67,8 +67,8 @@ class Window(Frame):
         tree.insert(parent='', index='end', iid=1, text="", values= arduinos[1].tuple_info) 
 
         #linechart
-        self.lineChartTemperatuur(dataset, temperatuur)
-        self.lineChartLicht(dataset, lichtintensiteit)
+        self.lineChartTemperatuur(tempdata, temperatuur)
+        self.lineChartLicht(lichtdata, lichtintensiteit)
      
         #font
         myFont = TkFont.Font(family="helvetica", size=10)
@@ -77,8 +77,8 @@ class Window(Frame):
         #openen startpagina(help)
         self.openHelpmij()
 
-    def lineChartTemperatuur(self, dataset, locatie):
-        df = DataFrame(dataset,columns=['uur','gemiddelde'])
+    def lineChartTemperatuur(self, tempdata, locatie):
+        df = DataFrame(tempdata,columns=['uur','gemiddelde'])
         figure = plt.Figure(figsize=(4,3), dpi=100)
         ax = figure.add_subplot(111)
         line = FigureCanvasTkAgg(figure, locatie)
@@ -87,8 +87,8 @@ class Window(Frame):
         df.plot(kind='line', legend=True, ax=ax, color='b',marker='o', fontsize=10)
         ax.set_title('Gemiddelde temperatuur')   
 
-    def lineChartLicht(self, dataset, locatie):
-        df = DataFrame(dataset,columns=['uur','gemiddelde'])
+    def lineChartLicht(self, lichtdata, locatie):
+        df = DataFrame(lichtdata,columns=['uur','gemiddelde'])
         figure = plt.Figure(figsize=(4,3), dpi=100)
         ax = figure.add_subplot(111)
         line = FigureCanvasTkAgg(figure, locatie)
@@ -167,16 +167,16 @@ arduinos = connections.arduinos
 
 # geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
 
-if self.Frame == rolluiken:
+if GUI.Frame == rolluiken:
     for i in curselection.dropdown():
         if arduinos[i]:
             omlaag_command = arduinos[i].status_omlaag()
             omhoog_command = arduinos[i].status_omhoog()
-elif self.Frame = lichtintensiteit: 
+elif GUI.Frame == lichtintensiteit: 
     for i in curselection.dropdown():
         if arduinos[i]:
             dataset = arduinos[i].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-elif self.Frame == temperatuur: 
+elif GUI.Frame == temperatuur: 
     for i in curselection.dropdown():
         if arduinos[i]:
             dataset = arduinos[i].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
@@ -185,8 +185,27 @@ elif self.Frame == temperatuur:
 # omhoog_command = arduinos[0].status_omhoog()
 
 #variabele
+
 #dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
 dropdown = StringVar(rolluiken)
+
+
+lichtdata = {'uur': [], #placeholder voor linechart temperatuur
+         'gemiddelde': []}  
+tempdata = {'uur': [], #placeholder voor linechart lichtintensiteit
+         'gemiddelde': []}  
+
+# om data te maken per sensor
+for ar in arduinos:
+    if isinstance(ar.sensor, type(arduino.Temperatuursensor())):
+        tempdata = ar.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+    elif isinstance(ar.sensor, type(arduino.Lichtsensor())):
+        lichtdata = ar.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+
+# dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+dropdown = StringVar(rolluiken)
+
+#tijdelijke  = ["arduino2", "arduino1"]
 
 #class aanroepen/instellen + start window
 GUI=Window(root)

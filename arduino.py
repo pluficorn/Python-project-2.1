@@ -304,10 +304,8 @@ class Arduino:
         self.rolmin = rolmin
         self.rolmax = rolmax
         time.sleep(5)
-        
-        # retreive_data(self)
 
-     def tuple_info(self):
+    def tuple_info(self):
         return tuple(self.naam, self.status, self.sensor.laatste_lezing())
     
     # verander de status van de arduino (of hij ingerold op uitgerold is)
@@ -348,5 +346,3 @@ class Arduino:
             print(ve)
 
 #####################################################################################################################################
-
-# s = Sensor()
