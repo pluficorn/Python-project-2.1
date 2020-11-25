@@ -36,7 +36,7 @@ day25 = datetime.datetime(2020, 11, 25).day
 hour1 = datetime.datetime(2020, 11, 1, 0).hour
 hour2 = datetime.datetime(2020, 11, 1, 1).hour
 hour3 = datetime.datetime(2020, 11, 1, 2).hour
-print(type(day25))
+
 testdata = {
     year: {
         month: {
@@ -169,6 +169,7 @@ testdata = {
     }
 }
 
+#pprint(testdata[2020][11])
 #####################################################################################################################################
 
 class Sensor:
@@ -219,19 +220,13 @@ class Sensor:
                     if uur in self.data[jaar][maand][dag]:
                         self.data[jaar][maand][dag][uur].append(value)
                     else:
-                         self.data[jaar] = { 
-                            maand: {
-                                dag : {
-                                    uur: [value]
-                                }
-                            }
+                         self.data[jaar][maand][dag] = { 
+                            uur: [value]
                         }
                 else:
-                    self.data[jaar] = { 
-                        maand: {
-                            dag : {
-                                uur: [value]
-                            }
+                    self.data[jaar][maand] = { 
+                        dag : {
+                            uur: [value]
                         }
                     }
             else:
@@ -255,7 +250,7 @@ class Sensor:
     def return_data(self, begindatum, einddatum):
         b_datum = begindatum
         e_datum = einddatum
-        print (type(b_datum.day))
+        
         verschil = e_datum - b_datum
             # gemiddelde data per uur over 1 dag
         if verschil.days == 0:
@@ -263,7 +258,9 @@ class Sensor:
             l = {}
             l["uur"] = []
             l["gemiddelde"] = []
+
             datum = self.data[b_datum.year][b_datum.month][b_datum.day]
+            
             for uur in datum:
                 tijdstip =datum[uur]
                 l["uur"].append(uur)
@@ -348,3 +345,5 @@ class Arduino:
             print(ve)
 
 #####################################################################################################################################
+
+# s = Sensor()

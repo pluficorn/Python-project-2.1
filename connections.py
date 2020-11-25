@@ -50,10 +50,7 @@ for ar in arduino_port:
     arduinos.append(Arduino(ar, sensor))
     current = arduinos[-1]
     data_transfer.send_sensor(current)
-    print(1)
     # Add data reading method to threading (so it runs in the background)
     t = threading.Thread(target=data_transfer.retreive_data, args= [current])
     t.start()
     threads.append(t)
-
-print(9)
