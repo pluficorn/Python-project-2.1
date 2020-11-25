@@ -18,6 +18,8 @@ CONST_MAX_ROLLOUT_CHANGE = 0x09
 CONST_MIN_TEMP_CHANGE = 0x0A
 CONST_MIN_LICHT_CHANGE = 0x0B
 CONST_MIN_ROLLOUT_CHANGE = 0x0C
+CONST_COMMAND = 0x0E
+
 CONST_SLEEP = 3
 
 # weet zo niet waar deze voor is
@@ -25,7 +27,6 @@ CONST_SWITCH = 50
 
 # # Data ophalen en opslaan
 def retreive_data(ar):
-    port = ar.port
     ser = ar.serial
     sensor = ar.sensor
     s = 60
@@ -38,27 +39,30 @@ def retreive_data(ar):
         b = ser.read()
         value = int.from_bytes(b, byteorder='little', signed=sign)
         ar.sensor.collect_data(value)
+        print()
         time.sleep(s)
 
 def send_sensor(ar):
     sensor = ar.sensor
     ser = ar.serial
-    # ser.write(CONST_TEMP_SENSOR)
 
     if isinstance(sensor, type(arduino.Temperatuursensor())):
         ser.write(CONST_TEMP_SENSOR)
     else:
         ser.write(CONST_LICHT_SENSOR)
 
-
 # Command om op te rollen
 def command_omhoog(ar):
     ser = ar.serial
+    ser.write(CONST_COMMAND)
+    time.sleep(CONST_SLEEP)
     ser.write(CONST_STOPROLLEN)
 
 # Command om uit te rollen
 def command_omlaag(ar):
     ser = ar.serial
+    ser.write(CONST_COMMAND)
+    time.sleep(CONST_SLEEP)
     ser.write(CONST_UITROLLEN)
 
 # Command to change lower limit for temp & light sensors 
