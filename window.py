@@ -63,8 +63,11 @@ class Window(Frame):
         tree.heading("Status", text="Status", anchor=W)
         tree.heading("Laatste meting", text="Laatste meting", anchor=W)
 
-        tree.insert(parent='', index='end', iid=0, text="", values= arduinos[0].tuple_info) 
-        tree.insert(parent='', index='end', iid=1, text="", values= arduinos[1].tuple_info) 
+        for i in arduinos:
+            t = i.tuple_info()
+            tree.insert(parent='', index='end', iid=0, text="Text", values= t) 
+        tree.pack(pady=20)
+
 
         #linechart
         self.lineChartTemperatuur(tempdata, temperatuur)
