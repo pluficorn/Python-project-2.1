@@ -840,8 +840,11 @@ class Sensor:
     def return_data(self, begindatum, einddatum):
         b_datum = begindatum
         e_datum = einddatum
-        
+
         verschil = e_datum - b_datum
+
+        l = {}
+
             # gemiddelde data per uur over 1 dag
         if verschil.days == 0:
             # bereken per uur het gemiddelde en voeg het toe aan een lijst
@@ -849,16 +852,16 @@ class Sensor:
             l["uur"] = []
             l["gemiddelde"] = []
 
-            datum = self.data[b_datum.year][b_datum.month][b_datum.day]
+            # geef alleen een lijst van data terug als de data ook bestaat
+            if b_datum.year in self.data:
+                if b_datum.month in self.data[b_datum.year]:
+                    if b_datum.day in self.data[b_datum.year][b_datum.month]:
+                        datum = self.data[b_datum.year][b_datum.month][b_datum.day]
             
-            for uur in datum:
-                tijdstip =datum[uur]
-                l["uur"].append(uur)
-                l["gemiddelde"].append((round((sum(tijdstip)/len(tijdstip))*10))/10)
-
-        else:
-            # stuurt een lege lijst terug als 
-            l = {}
+                        for uur in datum:
+                            tijdstip =datum[uur]
+                            l["uur"].append(uur)
+                            l["gemiddelde"].append((round((sum(tijdstip)/len(tijdstip))*10))/10)
 
         return l
     
@@ -871,21 +874,21 @@ class Sensor:
 
 class Lichtsensor(Sensor):
     #bij max gaan ze naar beneden, bij min gaan ze omhoog
-    def __init__(self, max=200, min=10):
+    def __init__(self, max=200, min=50):
         super().__init__(min, max)
                 
 #####################################################################################################################################
 
 class Temperatuursensor(Sensor):
     # Bij max gaan ze naar beneden, bij min gaan ze omhoog
-    def __init__(self, max=25, min=15):
+    def __init__(self, max=25, min=18):
         super().__init__(min, max)
 
 #####################################################################################################################################
 
 class Arduino:
     # arduino is 1 item uit de lijst arduino_port uit connections
-    def __init__(self, arduino, sensor, rolmin=2, rolmax=100):
+    def __init__(self, arduino, sensor, rolmin=8, rolmax=20):
         self.port = str(arduino[0])
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor
