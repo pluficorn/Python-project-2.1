@@ -39,7 +39,7 @@ def retreive_data(ar):
         b = ser.read()
         value = int.from_bytes(b, byteorder='little', signed=sign)
         ar.sensor.collect_data(value)
-        print()
+        print(value)
         time.sleep(s)
 
 def send_sensor(ar):
