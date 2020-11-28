@@ -774,6 +774,7 @@ class Sensor:
     def __init__(self, max=200, min=10):
         self.min = min
         self.max = max
+        # self.data = {}
         self.data = testdata
     
     # verander het bovenste limiet
@@ -840,7 +841,6 @@ class Sensor:
     def return_data(self, begindatum, einddatum):
         b_datum = begindatum
         e_datum = einddatum
-
         verschil = e_datum - b_datum
 
         l = {}
@@ -857,7 +857,6 @@ class Sensor:
                 if b_datum.month in self.data[b_datum.year]:
                     if b_datum.day in self.data[b_datum.year][b_datum.month]:
                         datum = self.data[b_datum.year][b_datum.month][b_datum.day]
-            
                         for uur in datum:
                             tijdstip =datum[uur]
                             l["uur"].append(uur)
@@ -868,7 +867,13 @@ class Sensor:
     #retourneerd de laatste lezing 
     def laatste_lezing(self):
         datum = datetime.datetime.now()
-        return self.data[datum.year][datum.month][datum.day][datum.hour][-1]  
+        l = "onbekend"
+        if datum.year in self.data:
+                if datum.month in self.data[datum.year]:
+                    if datum.day in self.data[datum.year][datum.month]:
+                        if datum.hour in self.data[datum.year][datum.month][datum.day]:
+                            l = self.data[datum.year][datum.month][datum.day][datum.hour][-1]
+        return  l 
 
 #####################################################################################################################################
 
@@ -897,6 +902,8 @@ class Arduino:
         self.rolmin = rolmin
         self.rolmax = rolmax
         time.sleep(5)
+        data_transfer.change_lower_limiet(self, sensor.min)
+        data_transfer.change_higher_limiet(self, sensor.max)
 
     def tuple_info(self):
         t = (self.naam, self.status, self.sensor.laatste_lezing())
