@@ -774,8 +774,8 @@ class Sensor:
     def __init__(self, max=200, min=10):
         self.min = min
         self.max = max
-        # self.data = {}
-        self.data = testdata
+        self.data = {}
+        # self.data = testdata
     
     # verander het bovenste limiet
     def change_max(self, value):
@@ -816,6 +816,7 @@ class Sensor:
                 if dag in self.data[jaar][maand]:
                     if uur in self.data[jaar][maand][dag]:
                         self.data[jaar][maand][dag][uur].append(value)
+                        print(self.data[jaar][maand][dag][uur])
                     else:
                          self.data[jaar][maand][dag][uur] = [value]
                 else:
@@ -836,6 +837,8 @@ class Sensor:
                     }
                 }
             }
+        # print(self.laatste_lezing())
+        pprint(self.data[jaar][maand][dag])
 
     # returnd lijst van gemiddelden gebasseerd op de periode tussen begin en eind datum (het is tot en met, dus laatste dag wordt ook gegeven)
     def return_data(self, begindatum, einddatum):
@@ -870,9 +873,19 @@ class Sensor:
         l = "onbekend"
         if datum.year in self.data:
                 if datum.month in self.data[datum.year]:
+                    
                     if datum.day in self.data[datum.year][datum.month]:
+                        
                         if datum.hour in self.data[datum.year][datum.month][datum.day]:
+                            
                             l = self.data[datum.year][datum.month][datum.day][datum.hour][-1]
+                        else:
+                            print(datum.year, datum.month, datum.day, datum.hour)
+                    else:
+                        print(datum.year, datum.month, datum.day)
+                        print(self.data[datum.year][datum.month][datum.day])
+                else:
+                    print(datum.year, datum.month)
         return  l 
 
 #####################################################################################################################################
