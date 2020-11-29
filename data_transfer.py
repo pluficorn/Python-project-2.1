@@ -29,6 +29,7 @@ CONST_SWITCH = 50
 def retreive_data(ar):
     ser = ar.serial
     sensor = ar.sensor
+    # tijd tussen lezingen
     s = 60
     if isinstance(sensor, type(arduino.Lichtsensor())):
         sign = False
@@ -54,7 +55,7 @@ def send_sensor(ar):
 # Command om op te rollen
 def command_omhoog(ar):
     ser = ar.serial
-    print("omhoog")
+    # print("omhoog")
     ser.write(CONST_COMMAND)
     time.sleep(CONST_SLEEP)
     ser.write(CONST_STOPROLLEN)
@@ -62,7 +63,7 @@ def command_omhoog(ar):
 # Command om uit te rollen
 def command_omlaag(ar):
     ser = ar.serial
-    print("omlaag")
+    # print("omlaag")
     ser.write(CONST_COMMAND)
     time.sleep(CONST_SLEEP)
     ser.write(CONST_UITROLLEN)
@@ -71,7 +72,7 @@ def command_omlaag(ar):
 def change_lower_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor
-    print("higher")
+    # print("higher")
     try:
         if isinstance(sensor, type(arduino.Temperatuursensor())):
             # 0x0A, opgevolgd met een nummer van -128-127 (signed byte): minimumtemperatuur
@@ -101,7 +102,7 @@ def change_lower_limiet(ar, value):
 def change_higher_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor
-    print("lower")
+    # print("lower")
     try:
         if isinstance(sensor, type(arduino.Temperatuursensor())):
             # 0x07, opgevolgd met een nummer van -128-127 (signed byte): maximumtemperatuur
@@ -129,7 +130,7 @@ def change_higher_limiet(ar, value):
 
 def change_lower_rollout(ar, value):
     ser = ar.serial
-    print("lower rollout")
+    # print("lower rollout")
     try:
         # 0x0C, opgevolgd met een nummer van 2-255 (unsigned byte): minimumuitrolafstand
         # check waarde voor adruino
@@ -145,7 +146,7 @@ def change_lower_rollout(ar, value):
 
 def change_higher_rollout(ar, value):
     ser = ar.serial
-    print("higher rollout")
+    # print("higher rollout")
     try:
         # 0x09, opgevolgd met een nummer van 2-255 (unsigned byte): maximumuitrolafstand
         # check waarde voor adruino

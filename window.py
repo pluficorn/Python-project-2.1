@@ -20,7 +20,7 @@ class Window(Frame):
 
         menu = tk.Menu(self.master)
         self.master.config(menu=menu)
-        tree = Treeview(statusoverzicht)
+        # tree = Treeview(statusoverzicht)
 
         #adding menus
         overzicht = tk.Menu(menu, tearoff=False)
@@ -63,26 +63,27 @@ class Window(Frame):
         omlaagButton = Button(rolluiken, text="Omlaag", command=omlaag_command)
         omlaagButton.place(x=460, y=250)
 
+        #Buttons voor veranderen waardes
+        # maxTempButton = Button(rolluiken, text="Verander Max Temperatuur", )
 
         #statusoverzicht page
-        # tree = Treeview(statusoverzicht)
-        # tree['columns'] = ("Rolluik", "Status", "Laatste meting")
-        # tree.column("#0", width=0, minwidth=25)
-        # tree.column("Rolluik", anchor=W, width=120)
-        # tree.column("Status", anchor=W, width=60)
-        # tree.column("Laatste meting", anchor=W, width=120)
+        self.tree = Treeview(statusoverzicht)
+        self.tree['columns'] = ("Rolluik", "Status", "Laatste meting")
+        self.tree.column("#0", width=0, minwidth=25)
+        self.tree.column("Rolluik", anchor=W, width=120)
+        self.tree.column("Status", anchor=W, width=60)
+        self.tree.column("Laatste meting", anchor=W, width=120)
 
-        # tree.heading("#0", text="", anchor=W)
-        # tree.heading("Rolluik", text="Rolluik", anchor=W)
-        # tree.heading("Status", text="Status", anchor=W)
-        # tree.heading("Laatste meting", text="Laatste meting", anchor=W)
+        self.tree.heading("#0", text="", anchor=W)
+        self.tree.heading("Rolluik", text="Rolluik", anchor=W)
+        self.tree.heading("Status", text="Status", anchor=W)
+        self.tree.heading("Laatste meting", text="Laatste meting", anchor=W)
 
-        # for i in arduinos:
-        #     t = i.tuple_info()
-        #     tree.insert(parent='', index='end', iid=0, text="Text", values= t)
-        # tree.pack(pady=20)
-        
-        # insert_tree(tree)
+        for i in arduinos:
+            t = i.tuple_info()
+            self.tree.insert(parent='', index='end', iid=0, text="Text", values= t)
+        self.tree.pack(pady=20)
+        insert_tree(self.tree)
 
         #linechart
         # self.lineChartTemperatuur(tempdata, temperatuur)
@@ -119,6 +120,7 @@ class Window(Frame):
 
     # toegevoegd
     def lineChartSensorData(self, tempdata, locatie):
+        # tempdata = grafiek()
         df = DataFrame(tempdata, columns=['uur','gemiddelde'])
         figure = plt.Figure(figsize=(4,3), dpi=100)
         ax = figure.add_subplot(111)
@@ -155,7 +157,8 @@ class Window(Frame):
 
     def openStatusoverzicht(self):
         self.hide_frames()
-        insert_tree(tree = Treeview(statusoverzicht))
+        # insert_tree(table())
+        insert_tree(self.tree)
         statusoverzicht.pack(fill="both", expand=1)
 
     def openRolluiken(self):
@@ -171,9 +174,9 @@ class Window(Frame):
         selected.set(lijst[0])
         widget = OptionMenu(locatie, selected, *lijst)
         widget.pack()
-
-    # def table(self):
-    #     tree=Treeview(statusoverzicht)
+    
+    # def table():
+    #     return Treeview(statusoverzicht)
 
 ###############################################################################
 
@@ -234,6 +237,8 @@ arduinos = connections.arduinos
 #         else:
 #             dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
 
+# Methode buiten uit klasse gehaald
+
 # Toegevoegd
 # De methodes hieronder t/m grafiek vervangen de hierboven gecommente ifthen()
 # methode om juiste arduino te krijgen
@@ -249,7 +254,8 @@ def get_arduino(ar):
 def getDatalist(ar):
     # Haalt de arduino op die bij de naam zit
     ard = get_arduino(ar)
-    return (ard.sensor.return_data(datetime.datetime.now(), datetime.datetime.now()))
+    l = ard.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+    return l
 
 # volgens mij waren deze en de volgende onbedoeld weggehaald
 def omlaag_command():
@@ -260,37 +266,19 @@ def omhoog_command():
     ar = get_arduino(selected)
     ar.status_omhoog()
 
-# nog niet af
-def grafiek():
-    ar = get_arduino(selected)
-    return ar.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-
 #toegevoegd
 def insert_tree(tree):
-    #haal oude tabel leeg voor opnieuw vullen
-    x = tree.get_children()
-    for c in x:
-        tree.delete(c)
+    # Verwijder bestaande data
+    for record in tree.get_children():
+        tree.delete(record)
 
-    tree['columns'] = ("Rolluik", "Status", "Laatste meting")
-    tree.column("#0", width=0, minwidth=25)
-    tree.column("Rolluik", anchor=W, width=120)
-    tree.column("Status", anchor=W, width=60)
-    tree.column("Laatste meting", anchor=W, width=120)
-
-    tree.heading("#0", text="", anchor=W)
-    tree.heading("Rolluik", text="Rolluik", anchor=W)
-    tree.heading("Status", text="Status", anchor=W)
-    tree.heading("Laatste meting", text="Laatste meting", anchor=W)
-
-    i = 1
+    # Zet data in de tabel (tree)
+    i = 0
     for a in arduinos:
         t = a.tuple_info()
-        print(a.sensor.laatste_lezing())
-        print(t)
-        tree.insert(parent='', index=i, iid=0, text="Text", values= t)
+        tree.insert(parent='', index='end', iid=i, text="", values= t)
         i += 1
-    tree.pack(pady=20)
+        tree.pack(pady=20)
 
 # selected was dropdown
 selected = StringVar(rolluiken)
