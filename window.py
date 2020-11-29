@@ -20,15 +20,11 @@ class Window(Frame):
 
         menu = tk.Menu(self.master)
         self.master.config(menu=menu)
-        # tree = Treeview(statusoverzicht)
 
         #adding menus
         overzicht = tk.Menu(menu, tearoff=False)
         menu.add_cascade(label="Overzicht", menu=overzicht)
         overzicht.add_command(label="Statusoverzicht", command=self.openStatusoverzicht)
-        # overzicht.add_command(label="Temperatuur", command=self.openTemperatuur)
-        # overzicht.add_command(label="Lichtintensiteit", command=self.openLichtintensiteit)
-        # Toegevoegd
         overzicht.add_command(label="Sensordata", command=self.openData)
 
         instellingen = tk.Menu(menu, tearoff=False)
@@ -44,20 +40,10 @@ class Window(Frame):
         helpmijTekst.insert(tk.END, helpmijtekst)
 
         #rolluiken page
-        # self.dropdown(arduinos, temperatuur)
-        # self.dropdown(arduinos, lichtintensiteit)
-        # self.dropdown(arduinos, rolluiken)
-        # Toegevoegd
-        # De lijst in de dropdown is nu gebasseerd op de naam van de arduino en niet het object
         namenlijst = [ar.naam for ar in arduinos]
         self.dropdown(namenlijst, sensordata)
         self.dropdown(namenlijst, rolluiken)
 
-        # omhoogButton = Button(rolluiken, text="Omhoog", command = ifthen)
-        # omhoogButton.place(x=460, y=200)
-        # omlaagButton = Button(rolluiken, text="Omlaag", command = ifthen)
-        # omlaagButton.place(x=460, y=250)
-        # Toegevoegd
         omhoogButton = Button(rolluiken, text="Omhoog", command=omhoog_command)
         omhoogButton.place(x=460, y=200)
         omlaagButton = Button(rolluiken, text="Omlaag", command=omlaag_command)
@@ -86,9 +72,6 @@ class Window(Frame):
         insert_tree(self.tree)
 
         #linechart
-        # self.lineChartTemperatuur(tempdata, temperatuur)
-        # self.lineChartLicht(lichtdata, lichtintensiteit)
-        # Toegevoegd
         self.lineChartSensorData(getDatalist(selected), sensordata)
 
         #font
@@ -98,29 +81,7 @@ class Window(Frame):
         #openen startpagina(help)
         self.openHelpmij()
 
-    # def lineChartTemperatuur(self, tempdata, locatie):
-    #     df = DataFrame(tempdata,columns=['uur','gemiddelde'])
-    #     figure = plt.Figure(figsize=(4,3), dpi=100)
-    #     ax = figure.add_subplot(111)
-    #     line = FigureCanvasTkAgg(figure, locatie)
-    #     line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-    #     df = df[['uur','gemiddelde']].groupby('uur').sum()
-    #     df.plot(kind='line', legend=True, ax=ax, color='b',marker='o', fontsize=10)
-    #     ax.set_title('Gemiddelde temperatuur')   
-
-    # def lineChartLicht(self, lichtdata, locatie):
-    #     df = DataFrame(lichtdata,columns=['uur','gemiddelde'])
-    #     figure = plt.Figure(figsize=(4,3), dpi=100)
-    #     ax = figure.add_subplot(111)
-    #     line = FigureCanvasTkAgg(figure, locatie)
-    #     line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-    #     df = df[['uur','gemiddelde']].groupby('uur').sum()
-    #     df.plot(kind='line', legend=True, ax=ax, color='r',marker='o', fontsize=10)
-    #     ax.set_title('Gemiddelde lichtintensiteit')  
-
-    # toegevoegd
     def lineChartSensorData(self, tempdata, locatie):
-        # tempdata = grafiek()
         df = DataFrame(tempdata, columns=['uur','gemiddelde'])
         figure = plt.Figure(figsize=(4,3), dpi=100)
         ax = figure.add_subplot(111)
@@ -132,32 +93,19 @@ class Window(Frame):
 
     def hide_frames(self):
         statusoverzicht.pack_forget()
-        # temperatuur.pack_forget()
-        # lichtintensiteit.pack_forget()
         rolluiken.pack_forget()
         helpmij.pack_forget()
-        # toegevoegd
         sensordata.pack_forget()
     
     def exitProgram(self):
         exit()
 
-    # def openTemperatuur(self):
-    #     self.hide_frames()
-    #     temperatuur.pack(fill="both", expand=1)
-
-    # def openLichtintensiteit(self):
-    #     self.hide_frames()
-    #     lichtintensiteit.pack(fill="both", expand=1)
-
-    # Toegevoegd
     def openData(self):
         self.hide_frames()
         sensordata.pack(fill="both", expand=1)
 
     def openStatusoverzicht(self):
         self.hide_frames()
-        # insert_tree(table())
         insert_tree(self.tree)
         statusoverzicht.pack(fill="both", expand=1)
 
@@ -170,13 +118,9 @@ class Window(Frame):
         helpmij.pack(fill="both", expand=1)
 
     def dropdown(self, lijst, locatie):
-        # selected was dropdown
         selected.set(lijst[0])
         widget = OptionMenu(locatie, selected, *lijst)
         widget.pack()
-    
-    # def table():
-    #     return Treeview(statusoverzicht)
 
 ###############################################################################
 
@@ -187,12 +131,9 @@ root.configure()
 root.geometry('600x500')
 
 #variabele
-temperatuur=tk.Frame(root, width=600, height=500)
-lichtintensiteit=tk.Frame(root, width=600, height=500)
 rolluiken=tk.Frame(root, width=600, height=500)
 helpmij=tk.Frame(root, width=600, height=500)
 statusoverzicht=tk.Frame(root, width=600, height=500)
-# Toegevoegd
 sensordata = tk.Frame(root, width=600, height=500)
 
 #Help
@@ -200,14 +141,8 @@ exittekst = "   - Exit: sluit de centrale \n"
 helptekst = "   - Help: informatie hoe de centrale werkt \n"
 rolluikenuitleg = "   - Rolluiken: wijzig de instellingen van de verschillende rolluiken \n"
 statusoverzichtuitleg = "   - Statusoverzicht: een overzicht van alle rolluiken en de huidige temperatuur en lichtintensiteit\n"
-# temperatuuruitleg = "   - Temperatuur: informatie over de gemiddelde temperatuur \n"
-# lichtuitleg = "   - Lichtintensiteit: informatie over de gemiddelde lichtintensiteit \n"
-meerinfo = "\nVoor meer informatie kunt u contact opnemen met 06-12345678 of mailen naar centrale@hanze.nl"
-# Toegevoegd
 sensordatauitleg = "   - Sensordata: informatie over de gemiddelde waardes van de Sensors over tijd \n"
-
-# helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent de rolluiken, hieronder volgt een korte uitleg van alle \nonderdelen binnen deze centrale: \n" 
-#                 + exittekst + helptekst + rolluikenuitleg + statusoverzichtuitleg + temperatuuruitleg + lichtuitleg + meerinfo)
+meerinfo = "\nVoor meer informatie kunt u contact opnemen met 06-12345678 of mailen naar centrale@hanze.nl"
 
 helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent de rolluiken, hieronder volgt een korte uitleg van alle \nonderdelen binnen deze centrale: \n" 
                 + exittekst + helptekst + rolluikenuitleg + statusoverzichtuitleg + sensordatauitleg + meerinfo)
@@ -215,31 +150,6 @@ helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent d
 #Lijst arduinos
 arduinos = connections.arduinos
 
-# geef wel nog de geselecteerde arduino voor het command. Dus {arduino}.status...
-# def ifthen():
-#     if tk.Frame == rolluiken:
-#         if dropdown.SelectedValue==arduinos[0]:
-#             omlaag_command = arduinos[0].status_omlaag()
-#             omhoog_command = arduinos[0].status_omhoog()
-#         else:
-#             omlaag_command = arduinos[1].status_omlaag()
-#             omhoog_command = arduinos[1].status_omhoog()
-
-#     elif tk.Frame == lichtintensiteit: 
-#         if dropdown.SelectedValue==arduinos[0]:
-#             dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-#         else:
-#             dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-
-#     elif tk.Frame == temperatuur: 
-#         if dropdown.SelectedValue==arduinos[0]:
-#             dataset = arduinos[0].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-#         else:
-#             dataset = arduinos[1].sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-
-# Methode buiten uit klasse gehaald
-
-# Toegevoegd
 # De methodes hieronder t/m grafiek vervangen de hierboven gecommente ifthen()
 # methode om juiste arduino te krijgen
 def get_arduino(ar):
@@ -247,7 +157,6 @@ def get_arduino(ar):
         if ard.naam == selected.get():
             return ard
 
-# Toegevoegd
 # Moet ervoor zorgen dat de grafiekdata meest recent is
 # en dus dat de grafiek elke keer bij het openen van de grafiektab
 # opnieuw wordt opgehaald en getoond
@@ -266,7 +175,6 @@ def omhoog_command():
     ar = get_arduino(selected)
     ar.status_omhoog()
 
-#toegevoegd
 def insert_tree(tree):
     # Verwijder bestaande data
     for record in tree.get_children():
@@ -282,20 +190,6 @@ def insert_tree(tree):
 
 # selected was dropdown
 selected = StringVar(rolluiken)
-
-# lichtdata = {'uur': [], #placeholder voor linechart temperatuur
-#          'gemiddelde': []}  
-# tempdata = {'uur': [], #placeholder voor linechart lichtintensiteit
-#          'gemiddelde': []}  
-
-# om data te maken per sensor
-# for ar in arduinos:
-#     if isinstance(ar.sensor, type(arduino.Temperatuursensor())):
-#         tempdata = ar.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-#     elif isinstance(ar.sensor, type(arduino.Lichtsensor())):
-#         lichtdata = ar.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
-
-#tijdelijke  = ["arduino2", "arduino1"]
 
 #class aanroepen/instellen + start window
 GUI=Window(root)
