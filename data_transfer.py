@@ -68,8 +68,8 @@ def send_sensor(ar):
     ser = ar.serial
     print("hello")
     if isinstance(sensor, type(arduino.Temperatuursensor())):
-        # ser.write(CONST_TEMP_SENSOR)
-        ser.write(1)
+        ser.write(CONST_TEMP_SENSOR)
+        # ser.write(1)
     else:
         ser.write(CONST_LICHT_SENSOR)
 
