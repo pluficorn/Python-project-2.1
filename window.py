@@ -61,8 +61,8 @@ class Window(Frame):
         minUitrolButton.place(x=150, y=150)
 
         #inputwaarde voor veranderen waarden
-        waarde = Entry(rolluiken)
-        waarde.place(x=450, y=130)
+        self.waarde = Entry(rolluiken)
+        self.waarde.place(x=450, y=130)
 
         #statusoverzicht page
         self.tree = Treeview(statusoverzicht)
@@ -133,6 +133,9 @@ class Window(Frame):
         selected.set(lijst[0])
         widget = OptionMenu(locatie, selected, *lijst)
         widget.pack()
+    
+    def minimal(self):
+        pass
 
 ###############################################################################
 
@@ -158,6 +161,8 @@ meerinfo = "\nVoor meer informatie kunt u contact opnemen met 06-12345678 of mai
 
 helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent de rolluiken, hieronder volgt een korte uitleg van alle \nonderdelen binnen deze centrale: \n" 
                 + exittekst + helptekst + rolluikenuitleg + statusoverzichtuitleg + sensordatauitleg + meerinfo)
+
+waarde = Entry(rolluiken)
 
 #Lijst arduinos
 arduinos = connections.arduinos
@@ -202,25 +207,26 @@ def insert_tree(tree):
 
 # Methodes voor veranderen van waarden
 def verander_min():
-    ar = get_arduino(selected)
-    data_transfer.change_lower_limiet(ar, waarde.get())
-    print(ar.sensor.min)
+    # ar = get_arduino(selected)
+    print(type(waarde))
+    # data_transfer.change_lower_limiet(ar, int(waarde.get()))
+    # print(ar.sensor.min)
 
 def verander_max():
     ar = get_arduino(selected)
-    data_transfer.change_higher_limiet(ar, waarde.get())
+    data_transfer.change_higher_limiet(ar, int(waarde.get()))
 
 def verander_max_uitrol():
     ar = get_arduino(selected)
-    data_transfer.change_higher_rollout(ar, waarde.get())
+    data_transfer.change_higher_rollout(ar, int(waarde.get()))
 
 def verander_min_uitrol():
     ar = get_arduino(selected)
-    data_transfer.change_lower_rollout(ar, waarde.get())
+    data_transfer.change_lower_rollout(ar, int(waarde.get()))
 
 # selected was dropdown
 selected = StringVar(rolluiken)
 
 #class aanroepen/instellen + start window
-GUI=Window(root)
+window=Window(root)
 root.mainloop()         
