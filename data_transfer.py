@@ -7,18 +7,18 @@ from string import ascii_lowercase
 
 # set const
 CONST_BAUT = 19200
-CONST_INROLLEN = 0x01
-CONST_UITROLLEN = 0x02
-CONST_STOPROLLEN = 0x03
-CONST_TEMP_SENSOR = 0x04
-CONST_LICHT_SENSOR = 0x05
-CONST_MAX_TEMP_CHANGE = 0x07
-CONST_MAX_LICHT_CHANGE = 0x08
-CONST_MAX_ROLLOUT_CHANGE = 0x09
-CONST_MIN_TEMP_CHANGE = 0x0A
-CONST_MIN_LICHT_CHANGE = 0x0B
-CONST_MIN_ROLLOUT_CHANGE = 0x0C
-CONST_COMMAND = 0x0E
+CONST_INROLLEN = (b'\x01')
+CONST_UITROLLEN = (b'\x02')
+CONST_STOPROLLEN = (b'\x03')
+CONST_TEMP_SENSOR = (b'\x04')
+CONST_LICHT_SENSOR = (b'\x05')
+CONST_MAX_TEMP_CHANGE = (b'\x07')
+CONST_MAX_LICHT_CHANGE = (b'\x08')
+CONST_MAX_ROLLOUT_CHANGE = (b'\x09')
+CONST_MIN_TEMP_CHANGE = (b'\x0A')
+CONST_MIN_LICHT_CHANGE = (b'\x0B')
+CONST_MIN_ROLLOUT_CHANGE = (b'\x0C')
+CONST_COMMAND = (b'\x0E')
 
 CONST_SLEEP = 0.01
 
@@ -41,9 +41,9 @@ def retreive_data(ar):
         while i < 2:
             b = ser.read()
             value = int.from_bytes(b, byteorder='little', signed=sign)
-            print("while")
+            # print("while")
             if value == 30:
-                print("hier")
+                # print("hier")
                 b = ser.read()
                 value = int.from_bytes(b, byteorder='little', signed=sign)
                 if value == 0:
@@ -57,7 +57,7 @@ def retreive_data(ar):
             elif value == 31:
                 b = ser.read()
                 value = int.from_bytes(b, byteorder='little', signed=sign)
-                print(value)
+                # print(value)
                 ar.sensor.collect_data(value)
             i += 1
 

@@ -153,6 +153,7 @@ class Window(Frame):
         sensordata.pack_forget()
     
     def exitProgram(self):
+        closeall()
         exit()
 
     def openData(self):
@@ -271,6 +272,9 @@ def verander_min_uitrol():
     value = getint(waarde.get())
     data_transfer.change_lower_rollout(ar, value)
 
+def closeall():
+    for ar in arduinos:
+        ar.serial.close()
 # selected was dropdown
 selected = StringVar(rolluiken)
 

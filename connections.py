@@ -16,9 +16,6 @@ ports = input("Give the COMs with ',' between the different COMs: ")
 ports_list = ports.split(",")
 arduino_ports = [i.upper() for i in ports_list]
 
-# # hardcoded
-# arduino_ports = [CONST_COM4]
-
 
 # https://en.it1352.com/article/1940209.html
 # in cmd: pip3 install pyserial
