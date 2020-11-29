@@ -48,9 +48,21 @@ class Window(Frame):
         omhoogButton.place(x=460, y=200)
         omlaagButton = Button(rolluiken, text="Omlaag", command=omlaag_command)
         omlaagButton.place(x=460, y=250)
+        
 
         #Buttons voor veranderen waardes
-        # maxTempButton = Button(rolluiken, text="Verander Max Temperatuur", )
+        maxWaardeButton = Button(rolluiken, text="Verander max waarde", command=verander_max)
+        maxWaardeButton.place(x=300, y=100)
+        minWaardeButton = Button(rolluiken, text="Verander min waarde", command=verander_min)
+        minWaardeButton.place(x=300, y=150)
+        maxUitrolButton = Button(rolluiken, text="Verander max uitrol", command=verander_max_uitrol)
+        maxUitrolButton.place(x=150, y=100)
+        minUitrolButton = Button(rolluiken, text="Verander min uitrol", command=verander_min_uitrol)
+        minUitrolButton.place(x=150, y=150)
+
+        #inputwaarde voor veranderen waarden
+        waarde = Entry(rolluiken)
+        waarde.place(x=450, y=130)
 
         #statusoverzicht page
         self.tree = Treeview(statusoverzicht)
@@ -187,6 +199,24 @@ def insert_tree(tree):
         tree.insert(parent='', index='end', iid=i, text="", values= t)
         i += 1
         tree.pack(pady=20)
+
+# Methodes voor veranderen van waarden
+def verander_min():
+    ar = get_arduino(selected)
+    data_transfer.change_lower_limiet(ar, waarde.get())
+    print(ar.sensor.min)
+
+def verander_max():
+    ar = get_arduino(selected)
+    data_transfer.change_higher_limiet(ar, waarde.get())
+
+def verander_max_uitrol():
+    ar = get_arduino(selected)
+    data_transfer.change_higher_rollout(ar, waarde.get())
+
+def verander_min_uitrol():
+    ar = get_arduino(selected)
+    data_transfer.change_lower_rollout(ar, waarde.get())
 
 # selected was dropdown
 selected = StringVar(rolluiken)

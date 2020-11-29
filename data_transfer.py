@@ -20,7 +20,7 @@ CONST_MIN_LICHT_CHANGE = 0x0B
 CONST_MIN_ROLLOUT_CHANGE = 0x0C
 CONST_COMMAND = 0x0E
 
-CONST_SLEEP = 1
+CONST_SLEEP = 0.01
 
 # weet zo niet waar deze voor is
 CONST_SWITCH = 50
@@ -59,6 +59,7 @@ def command_omhoog(ar):
 
 # Command om uit te rollen
 def command_omlaag(ar):
+    print("omlaag")
     ser = ar.serial
     ser.write(CONST_UITROLLEN)
 
@@ -76,7 +77,8 @@ def change_lower_limiet(ar, value):
 
             b = value.to_bytes(1, 'little', signed=True)
             ser.write(CONST_MIN_TEMP_CHANGE)
-            time.sleep(CONST_SLEEP)
+            while ser.out_waiting > 0 :
+                pass
             ser.write(b)
 
         elif isinstance(sensor, type(arduino.Lichtsensor())):
@@ -87,7 +89,8 @@ def change_lower_limiet(ar, value):
 
             b = value.to_bytes(1, 'little', signed=False)
             ser.write(CONST_MIN_LICHT_CHANGE)
-            time.sleep(CONST_SLEEP)
+            while ser.out_waiting > 0 :
+                pass
             ser.write(b)
     except ValueError as ve:
             print(ve)
@@ -106,7 +109,8 @@ def change_higher_limiet(ar, value):
 
             b = value.to_bytes(1, 'little', signed=True)
             ser.write(CONST_MAX_TEMP_CHANGE)
-            time.sleep(CONST_SLEEP)
+            while ser.out_waiting > 0 :
+                pass
             ser.write(b)
 
         elif isinstance(sensor, type(arduino.Lichtsensor())):
@@ -117,7 +121,8 @@ def change_higher_limiet(ar, value):
 
             b = value.to_bytes(1, 'little', signed=False)
             ser.write(CONST_MAX_LICHT_CHANGE)
-            time.sleep(CONST_SLEEP)
+            while ser.out_waiting > 0 :
+                pass
             ser.write(b)
     except ValueError as ve:
             print(ve)  
@@ -133,7 +138,8 @@ def change_lower_rollout(ar, value):
 
         b = value.to_bytes(1, 'little', signed=False)
         ser.write(CONST_MIN_ROLLOUT_CHANGE)
-        time.sleep(CONST_SLEEP)
+        while ser.out_waiting > 0 :
+            pass
         ser.write(b)
     except ValueError as ve:
             print(ve)
