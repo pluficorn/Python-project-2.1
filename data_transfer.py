@@ -55,7 +55,6 @@ def send_sensor(ar):
 # Command om op te rollen
 def command_omhoog(ar):
     ser = ar.serial
-    # print("omhoog")
     ser.write(CONST_COMMAND)
     time.sleep(CONST_SLEEP)
     ser.write(CONST_STOPROLLEN)
@@ -63,7 +62,6 @@ def command_omhoog(ar):
 # Command om uit te rollen
 def command_omlaag(ar):
     ser = ar.serial
-    # print("omlaag")
     ser.write(CONST_COMMAND)
     time.sleep(CONST_SLEEP)
     ser.write(CONST_UITROLLEN)

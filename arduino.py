@@ -765,7 +765,6 @@ testdata = {
     }
 }
 
-#pprint(testdata[2020][11])
 #####################################################################################################################################
 
 class Sensor:
@@ -816,23 +815,18 @@ class Sensor:
                 if dag in self.data[jaar][maand]:
                     if uur in self.data[jaar][maand][dag]:
                         self.data[jaar][maand][dag][uur].append(value)
-                        x = self.data[jaar][maand][dag][uur]
-                        print(x)
                     else:
                         self.data[jaar][maand][dag][uur] = [value]
-                        print(2)
                 else:
                     self.data[jaar][maand][dag] = { 
                         uur: [value]
                     }
-                    print(3)
             else:
                 self.data[jaar][maand] = { 
                     dag : {
                         uur: [value]
                     }
                 }
-                print(4)
         else:
             self.data[jaar] = {
                 maand: {
@@ -841,9 +835,6 @@ class Sensor:
                     }
                 }
             }
-            print(5)
-        # print(self.laatste_lezing())
-        # pprint(self.data[jaar][maand][dag])
 
     # returnd lijst van gemiddelden gebasseerd op de periode tussen begin en eind datum (het is tot en met, dus laatste dag wordt ook gegeven)
     def return_data(self, begindatum, einddatum):
@@ -883,25 +874,10 @@ class Sensor:
         l = "onbekend"
         if jaar in self.data:
             if maand in self.data[jaar]:
-                
                 if dag in self.data[jaar][maand]:
-                    
                     if uur in self.data[jaar][maand][dag]:
-                        
                         l = self.data[jaar][maand][dag][uur][-1]
-                    else:
-                        print("no hour", jaar, maand, dag, uur)
-                else:
-                    print("no day", jaar, maand, dag)
-                    # print(self.data[jaar][maand])
-            else:
-                print("no month", jaar, maand)
-        else:
-            print("no year", jaar)
-        print(l)
         return  l 
-        # print(self.data[jaar][maand][dag][uur])
-        # return self.data[jaar][maand][dag][uur][-1]
 
 #####################################################################################################################################
 
@@ -934,14 +910,7 @@ class Arduino:
         data_transfer.change_higher_limiet(self, sensor.max)
 
     def tuple_info(self):
-        naam = self.naam
-        status = self.status
-        print (type(self.sensor))
-        lezing = self.sensor.laatste_lezing()
-        print("wat we in tuple_info() zien:", lezing)
-        t = (self.naam, self.status, self.sensor.laatste_lezing())
-        # print("new tuple gets returned")
-        return t
+        return (self.naam, self.status, self.sensor.laatste_lezing())
     
     # verander de status van de arduino (of hij ingerold op uitgerold is)
     def status_omhoog(self):
