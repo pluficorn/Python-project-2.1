@@ -879,6 +879,21 @@ class Sensor:
                         l = self.data[jaar][maand][dag][uur][-1]
         return  l 
 
+    def laatste_uur(self):
+        datum = datetime.datetime.now()
+        uur = datum.hour
+        dag = datum.day
+        maand = datum.month
+        jaar = datum.year
+
+        l = "onbekend"
+        if jaar in self.data:
+            if maand in self.data[jaar]:
+                if dag in self.data[jaar][maand]:
+                    l = self.data[jaar][maand][dag][uur]
+        gem = sum(l) / len(l)
+        return  gem
+
 #####################################################################################################################################
 
 class Lichtsensor(Sensor):
