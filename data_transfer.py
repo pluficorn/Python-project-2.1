@@ -55,15 +55,11 @@ def send_sensor(ar):
 # Command om op te rollen
 def command_omhoog(ar):
     ser = ar.serial
-    ser.write(CONST_COMMAND)
-    time.sleep(CONST_SLEEP)
     ser.write(CONST_STOPROLLEN)
 
 # Command om uit te rollen
 def command_omlaag(ar):
     ser = ar.serial
-    ser.write(CONST_COMMAND)
-    time.sleep(CONST_SLEEP)
     ser.write(CONST_UITROLLEN)
 
 # Command to change lower limit for temp & light sensors 
