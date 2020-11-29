@@ -35,20 +35,41 @@ def retreive_data(ar):
         sign = False
     else:
         sign = True
-
+    # print("one")
     while(1):
-        b = ser.read()
-        value = int.from_bytes(b, byteorder='little', signed=sign)
-        ar.sensor.collect_data(value)
-        print(type(sensor), value)
+        i = 0
+        while i < 2:
+            b = ser.read()
+            value = int.from_bytes(b, byteorder='little', signed=sign)
+            print("while")
+            if value == 30:
+                print("hier")
+                b = ser.read()
+                value = int.from_bytes(b, byteorder='little', signed=sign)
+                if value == 0:
+                    ar.status = "Uitgerold"
+                elif value == 1:
+                    ar.status = "Opgerold"
+                elif value == 2:
+                    ar.status = "Uitrollen"
+                elif value == 3:
+                    ar.status = "Oprollen"
+            elif value == 31:
+                b = ser.read()
+                value = int.from_bytes(b, byteorder='little', signed=sign)
+                print(value)
+                ar.sensor.collect_data(value)
+            i += 1
+
         time.sleep(s)
 
 def send_sensor(ar):
     sensor = ar.sensor
     ser = ar.serial
-
+    print("hello")
     if isinstance(sensor, type(arduino.Temperatuursensor())):
-        ser.write(CONST_TEMP_SENSOR)
+        # ser.write(CONST_TEMP_SENSOR)
+        ser.write(1)
     else:
         ser.write(CONST_LICHT_SENSOR)
 

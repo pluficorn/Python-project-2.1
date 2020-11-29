@@ -902,10 +902,9 @@ class Arduino:
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor
         self.serial = serial.Serial(self.port,  data_transfer.CONST_BAUT)
-        self.status = "omhoog"
+        self.status = "Onbekend"
         self.rolmin = rolmin
         self.rolmax = rolmax
-        time.sleep(5)
         data_transfer.change_lower_limiet(self, sensor.min)
         data_transfer.change_higher_limiet(self, sensor.max)
 
