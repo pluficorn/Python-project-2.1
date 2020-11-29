@@ -49,7 +49,6 @@ class Window(Frame):
         omlaagButton = Button(rolluiken, text="Omlaag", command=omlaag_command)
         omlaagButton.place(x=460, y=250)
         
-
         #Buttons voor veranderen waardes
         maxWaardeButton = Button(rolluiken, text="Verander max waarde", command=verander_max)
         maxWaardeButton.place(x=300, y=100)
@@ -60,9 +59,9 @@ class Window(Frame):
         minUitrolButton = Button(rolluiken, text="Verander min uitrol", command=verander_min_uitrol)
         minUitrolButton.place(x=150, y=150)
 
-        #inputwaarde voor veranderen waarden
-        self.waarde = Entry(rolluiken)
-        self.waarde.place(x=450, y=130)
+        # #inputwaarde voor veranderen waarden
+        # self.waarde = Entry(rolluiken)
+        # self.waarde.place(x=450, y=130)
 
         #statusoverzicht page
         self.tree = Treeview(statusoverzicht)
@@ -163,6 +162,7 @@ helpmijtekst = ("Welkom! \n\n" + "In deze centrale kunt u alles inzien omtrent d
                 + exittekst + helptekst + rolluikenuitleg + statusoverzichtuitleg + sensordatauitleg + meerinfo)
 
 waarde = Entry(rolluiken)
+waarde.place(x=450, y=130)
 
 #Lijst arduinos
 arduinos = connections.arduinos
@@ -207,22 +207,24 @@ def insert_tree(tree):
 
 # Methodes voor veranderen van waarden
 def verander_min():
-    # ar = get_arduino(selected)
-    print(type(waarde))
-    # data_transfer.change_lower_limiet(ar, int(waarde.get()))
-    # print(ar.sensor.min)
+    ar = get_arduino(selected)
+    value = getint(waarde.get())
+    data_transfer.change_lower_limiet(ar, value)
 
 def verander_max():
     ar = get_arduino(selected)
-    data_transfer.change_higher_limiet(ar, int(waarde.get()))
+    value = getint(waarde.get())
+    data_transfer.change_higher_limiet(ar, value)
 
 def verander_max_uitrol():
     ar = get_arduino(selected)
-    data_transfer.change_higher_rollout(ar, int(waarde.get()))
+    value = getint(waarde.get())
+    data_transfer.change_higher_rollout(ar, value)
 
 def verander_min_uitrol():
     ar = get_arduino(selected)
-    data_transfer.change_lower_rollout(ar, int(waarde.get()))
+    value = getint(waarde.get())
+    data_transfer.change_lower_rollout(ar, value)
 
 # selected was dropdown
 selected = StringVar(rolluiken)
