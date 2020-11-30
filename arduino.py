@@ -924,8 +924,8 @@ class Arduino:
         self.status = "Onbekend"
         self.rolmin = rolmin
         self.rolmax = rolmax
-        data_transfer.change_lower_limiet(self, sensor.min)
-        data_transfer.change_higher_limiet(self, sensor.max)
+        # data_transfer.change_lower_limiet(self, sensor.min)
+        # data_transfer.change_higher_limiet(self, sensor.max)
 
     def tuple_info(self):
         return (self.naam, self.status, self.sensor.laatste_lezing())
