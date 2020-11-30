@@ -113,7 +113,8 @@ class Window(Frame):
 
     def openData(self):
         self.hide_frames()
-        self.lineChartSensorData(getDatalist(selected), sensordata)
+        for ar in arduinos:
+            self.lineChartSensorData(ar.sensor.return_alle_data(), sensordata)
         sensordata.pack(fill="both", expand=1)
 
     def openStatusoverzicht(self):
