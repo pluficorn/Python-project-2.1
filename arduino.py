@@ -871,7 +871,7 @@ class Sensor:
         maand = datum.month
         jaar = datum.year
 
-        l = "onbekend"
+        l = 0
         if jaar in self.data:
             if maand in self.data[jaar]:
                 if dag in self.data[jaar][maand]:
@@ -886,13 +886,16 @@ class Sensor:
         maand = datum.month
         jaar = datum.year
 
-        l = "onbekend"
+        l = list()
         if jaar in self.data:
             if maand in self.data[jaar]:
                 if dag in self.data[jaar][maand]:
                     l = self.data[jaar][maand][dag][uur]
-        gem = sum(l) / len(l)
-        return  gem
+        
+        gem = 0
+        if len(l) != 0:
+            gem = sum(l) / len(l)
+        return gem
 
 #####################################################################################################################################
 
@@ -917,6 +920,7 @@ class Arduino:
         self.naam = arduino[1].split(" (COM")[0]
         self.sensor = sensor
         self.serial = serial.Serial(self.port,  data_transfer.CONST_BAUT)
+        time.sleep(2) # 2 sec voor arduino reset, zie https://stackoverflow.com/questions/21073086/wait-on-arduino-auto-reset-using-pyserial
         self.status = "Onbekend"
         self.rolmin = rolmin
         self.rolmax = rolmax
