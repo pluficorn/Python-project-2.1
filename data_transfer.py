@@ -33,11 +33,10 @@ def retreive_data(ar):
     sensor = ar.sensor
     # tijd tussen lezingen
     s = 6
-    if isinstance(sensor, type(arduino.Lichtsensor())):
-        sign = False
-    else:
-        sign = True
-    # print("one")
+    # if isinstance(sensor, type(arduino.Lichtsensor())):
+    #     sign = False
+    # else:
+    #     sign = True
     while(1):
         incoming_bytes = ser.read(4)
         number_array = struct.unpack('<BBBB', incoming_bytes)
@@ -49,41 +48,38 @@ def retreive_data(ar):
 def send_sensor(ar):
     sensor = ar.sensor
     ser = ar.serial
-    print("hello")
     if isinstance(sensor, type(arduino.Temperatuursensor())):
         ser.write(CONST_TEMP_SENSOR)
-        # ser.write(1)
     else:
         ser.write(CONST_LICHT_SENSOR)
 
 # Command om op te rollen
 def command_omhoog(ar):
     ser = ar.serial
-    print("sending",b'\x01', "moet 01 zijn")
+
     ser.write(b'\x01')
 
 # Command om uit te rollen
 def command_omlaag(ar):
     ser = ar.serial
-    print("omlaag")
-    print("sending",b'\x02', "moet 02 zijn")
+
     ser.write(b'\x02')
 
 def command_autonomy(ar):
     ser = ar.serial
-    print("sending",b'\x0D', "moet 0D zijn")
+
     ser.write(b'\x0D')
 
 def command_manual(ar):
     ser = ar.serial
-    print("sending",b'\x0E', "moet 0E zijn")
+
     ser.write(b'\x0E')
 
 # Command to change lower limit for temp & light sensors 
 def change_lower_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor
-    # print("higher")
+
     try:
         if isinstance(sensor, type(arduino.Temperatuursensor())):
             # 0x0A, opgevolgd met een nummer van -128-127 (signed byte): minimumtemperatuur
@@ -115,7 +111,7 @@ def change_lower_limiet(ar, value):
 def change_higher_limiet(ar, value):
     ser = ar.serial
     sensor = ar.sensor
-    # print("lower")
+
     try:
         if isinstance(sensor, type(arduino.Temperatuursensor())):
             # 0x07, opgevolgd met een nummer van -128-127 (signed byte): maximumtemperatuur
@@ -145,7 +141,7 @@ def change_higher_limiet(ar, value):
 
 def change_lower_rollout(ar, value):
     ser = ar.serial
-    # print("lower rollout")
+
     try:
         # 0x0C, opgevolgd met een nummer van 2-255 (unsigned byte): minimumuitrolafstand
         # check waarde voor adruino
@@ -162,7 +158,7 @@ def change_lower_rollout(ar, value):
 
 def change_higher_rollout(ar, value):
     ser = ar.serial
-    # print("higher rollout")
+
     try:
         # 0x09, opgevolgd met een nummer van 2-255 (unsigned byte): maximumuitrolafstand
         # check waarde voor adruino
