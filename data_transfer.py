@@ -32,7 +32,7 @@ def retreive_data(ar):
     ser = ar.serial
     sensor = ar.sensor
     # tijd tussen lezingen
-    s = 6
+    s = 60
     # if isinstance(sensor, type(arduino.Lichtsensor())):
     #     sign = False
     # else:
