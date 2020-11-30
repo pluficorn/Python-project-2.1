@@ -99,8 +99,10 @@ class Window(Frame):
         # fig = Figure(figsize = (10, 5), dpi = 100)
         # plot1 = fig.add_subplot(121)
         lijst_van_data = list()
+        lijst_van_namen = list()
         for ar in arduinos:
             lijst_van_data.append(ar.sensor.return_alle_data())
+            lijst_van_namen.append(ar.naam)
 
         # plot1.plot(lijst_van_data[0], linestyle='--', marker='o', color='b')
         # #canvas = FigureCanvasTkAgg(fig, master = locatie)
@@ -111,9 +113,14 @@ class Window(Frame):
         
         # canvas.draw()
         # canvas.get_tk_widget().pack()
-
-        plt.plot(lijst_van_data[1], linestyle='--', marker='o', color='b')
+        plt.subplot(2, 1, 1)
+        plt.title(lijst_van_namen[0])
         plt.plot(lijst_van_data[0], linestyle='--', marker='o', color='b')
+
+        if len(lijst_van_namen) > 1:
+            plt.subplot(2, 1, 2)
+            plt.title(lijst_van_namen[1])
+            plt.plot(lijst_van_data[1], linestyle='--', marker='o', color='b')
 
         plt.show()
 
