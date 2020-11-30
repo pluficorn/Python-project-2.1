@@ -8,10 +8,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from datetime import datetime, timedelta
 import arduino
 import connections
 import data_transfer
 import datetime
+from pprint import pprint
 
 class Window(Frame):
     
@@ -79,17 +81,6 @@ class Window(Frame):
         self.tree.pack(pady=20)
         insert_tree(self.tree)
 
-        #linechart
-        # self.lineChartSensorData(getDatalist(selected), sensordata)
-        # self.df = DataFrame(getDatalist(selected), columns=['uur','gemiddelde'])
-        # figure = plt.Figure(figsize=(4,3), dpi=100)
-        # ax = figure.add_subplot(111)
-        # line = FigureCanvasTkAgg(figure, sensordata)
-        # line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-        # self.df = self.df[['uur','gemiddelde']].groupby('uur').sum()
-        # self.df.plot(kind='line', legend=True, ax=ax, color='b',marker='o', fontsize=10)
-        # ax.set_title('Gemiddelde waardes')
-
         #font
         myFont = TkFont.Font(family="helvetica", size=10)
         helpmijTekst.configure(font=myFont, state="disabled")
@@ -97,68 +88,13 @@ class Window(Frame):
         #openen startpagina(help)
         self.openHelpmij()
     
-
-    # def lineChartSensorData(self, tempdata, locatie):
-    #     # zijn_waardes_signed = False # Temperatuurwaardes worden technisch gezien signed verstuurd, maar denk niet dat dit te pas komt bij onze demonstratie.
-    #     x_len = 100                 # Hoeveel waardes weergegeven moet worden
-    #     y_range = [0, 255]          # Bereik van y-as
-    #     interval = 1                # Hoe vaak de animatie moet verversen in ms.
-    #                                 # ^ Is ook afhankelijk van hoe vaak de data verstuurd wordt door de arduino; de langzaamste van de twee "wint".
-
-    #     # Create figure for plotting
-    #     fig = plt.figure()
-    #     ax = fig.add_subplot(1, 1, 1)
-    #     xs = list(range(0, x_len))
-    #     ys = [0] * x_len
-    #     ax.set_ylim(y_range)
-
-    #     # Create a blank line. We will update the line in animate
-    #     line, = ax.plot(xs, ys)
-
-    #     # Add labels
-    #     plt.title('Data over Time')
-    #     plt.xlabel('Time')
-    #     plt.ylabel('Readings')
-    #     ar = get_arduino(selected)
-    #     with ar.serial as ser: # Marijn note: dit zou ook kunnen zonder with, voor het geval dat onhandig is. https://pyserial.readthedocs.io/en/latest/shortintro.html
-    #         # This function is called periodically from FuncAnimation
-    #         def animate(i, ys):
-    #             # Read data
-
-    #             while ser.in_waiting > 0:
-    #                 # print("zitten er",ser.in_waiting,"in de rij")
-    #                 raw_data = ar.sensor.laatste_lezing
-    #                 # light_intensity = int.from_bytes(raw_data, "big", signed=zijn_waardes_signed)
-
-    #                 # print(light_intensity) # ------------------------------ handig voor debuggen
-    #                 # Add data to list
-    #                 ys.append(raw_data)
-
-    #             # Limit y list to set number of items
-    #             ys = ys[-x_len:]
-
-    #             # Update line with new Y values
-    #             line.set_ydata(ys)
-    #             return line,
-
-    #         # Set up plot to call animate() function periodically
-    #         ani = animation.FuncAnimation(fig,
-    #             animate,
-    #             fargs=(ys,),
-    #             interval=interval,
-    #             blit=True)
-    #         plt.show()
-    
     def lineChartSensorData(self, tempdata, locatie):
-        self.lineChartSensorData(getDatalist(selected), sensordata)
-        self.df = DataFrame(getDatalist(selected), columns=['uur','gemiddelde'])
-        figure = plt.Figure(figsize=(4,3), dpi=100)
-        ax = figure.add_subplot(111)
-        line = FigureCanvasTkAgg(figure, sensordata)
-        line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-        self.df = self.df[['uur','gemiddelde']].groupby('uur').sum()
-        self.df.plot(kind='line', legend=True, ax=ax, color='b',marker='o', fontsize=10)
-        ax.set_title('Gemiddelde waardes')
+        pprint(tempdata)
+        plt.plot(tempdata['uur'], tempdata['gemiddelde'])
+        plt.ylabel('gemiddelde lezing')
+        plt.xlabel('tijd in uren')
+        plt.grid(True)
+        plt.show()
 
     def hide_frames(self):
         statusoverzicht.pack_forget()
@@ -249,7 +185,6 @@ def omlaag_command():
 
 def omhoog_command():
     ar = get_arduino(selected)
-    print(ar.serial.is_open)
     ar.status_omhoog()
 
 def insert_tree(tree):
