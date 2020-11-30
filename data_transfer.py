@@ -63,7 +63,7 @@ def command_omhoog(ar):
     ser.write(b'\x01')
 
 # Command om uit te rollen
-def command_omlaag(ar):/
+def command_omlaag(ar):
     ser = ar.serial
     print("omlaag")
     print("sending",b'\x02', "moet 02 zijn")
@@ -71,13 +71,13 @@ def command_omlaag(ar):/
 
 def command_autonomy(ar):
     ser = ar.serial
-    print("sending",b'\x0E', "moet 0E zijn")
-    ser.write(b'\x0E')
+    print("sending",b'\x0D', "moet 0D zijn")
+    ser.write(b'\x0D')
 
 def command_manual(ar):
     ser = ar.serial
-    print("sending",b'\x0D', "moet 0D zijn")
-    ser.write(b'\x0D')
+    print("sending",b'\x0E', "moet 0E zijn")
+    ser.write(b'\x0E')
 
 # Command to change lower limit for temp & light sensors 
 def change_lower_limiet(ar, value):

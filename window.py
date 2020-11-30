@@ -79,9 +79,11 @@ class Window(Frame):
         self.tree.heading("Status", text="Status", anchor=W)
         self.tree.heading("Laatste meting", text="Laatste meting", anchor=W)
 
+        ii = 0
         for i in arduinos:
             t = i.tuple_info()
-            self.tree.insert(parent='', index='end', iid=0, text="Text", values= t)
+            self.tree.insert(parent='', index='end', iid=ii, text="Text", values= t)
+            ii += 1
         self.tree.pack(pady=20)
         insert_tree(self.tree)
 
@@ -216,23 +218,36 @@ def insert_tree(tree):
 # Methodes voor veranderen van waarden
 def verander_min():
     ar = get_arduino(selected)
-    value = getint(waarde.get())
-    data_transfer.change_lower_limiet(ar, value)
+    try:
+        value = getint(waarde.get())
+        data_transfer.change_lower_limiet(ar, value)
+    except ValueError:
+        print("Vul aub een geldig getal in.")
 
 def verander_max():
     ar = get_arduino(selected)
-    value = getint(waarde.get())
-    data_transfer.change_higher_limiet(ar, value)
+    try:
+        value = getint(waarde.get())
+        data_transfer.change_higher_limiet(ar, value)
+    except ValueError:
+        print("Vul aub een geldig getal in.")
+        
 
 def verander_max_uitrol():
     ar = get_arduino(selected)
-    value = getint(waarde.get())
-    data_transfer.change_higher_rollout(ar, value)
+    try:
+        value = getint(waarde.get())
+        data_transfer.change_higher_rollout(ar, value)
+    except ValueError:
+        print("Vul aub een geldig getal in.")
 
 def verander_min_uitrol():
     ar = get_arduino(selected)
-    value = getint(waarde.get())
-    data_transfer.change_lower_rollout(ar, value)
+    try:
+        value = getint(waarde.get())
+        data_transfer.change_lower_rollout(ar, value)
+    except ValueError:
+        print("Vul aub een geldig getal in.")
 
 # selected was dropdown
 selected = StringVar(rolluiken)
