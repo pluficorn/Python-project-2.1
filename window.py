@@ -90,7 +90,7 @@ class Window(Frame):
     
     def lineChartSensorData(self, tempdata, locatie):
         pprint(tempdata)
-        plt.plot(tempdata['uur'], tempdata['gemiddelde'])
+        plt.plot(tempdata['uur'], tempdata['gemiddelde'], linestyle='--', marker='o', color='b')
         plt.ylabel('gemiddelde lezing')
         plt.xlabel('tijd in uren')
         plt.grid(True)
