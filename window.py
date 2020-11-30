@@ -51,6 +51,10 @@ class Window(Frame):
         omhoogButton.place(x=460, y=200)
         omlaagButton = Button(rolluiken, text="Omlaag", command=omlaag_command)
         omlaagButton.place(x=460, y=250)
+        automaticButton = Button(rolluiken, text="Autonoom", command=autonomy_command)
+        automaticButton.place(x=460, y=275)
+        manualButton = Button(rolluiken, text="Handmatig", command=manual_command)
+        manualButton.place(x=460, y=300)
         
         #Buttons voor veranderen waardes
         maxWaardeButton = Button(rolluiken, text="Verander max waarde", command=verander_max)
@@ -90,7 +94,7 @@ class Window(Frame):
     
     def lineChartSensorData(self, tempdata, locatie):
         pprint(tempdata)
-        plt.plot(tempdata['uur'], tempdata['gemiddelde'], linestyle='--', marker='o', color='b')
+        plt.plot(tempdata, linestyle='--', marker='o', color='b')
         plt.ylabel('gemiddelde lezing')
         plt.xlabel('tijd in uren')
         plt.grid(True)
@@ -175,7 +179,8 @@ def get_arduino(ar):
 def getDatalist(ar):
     # Haalt de arduino op die bij de naam zit
     ard = get_arduino(ar)
-    l = ard.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+    #l = ard.sensor.return_data(datetime.datetime.now(), datetime.datetime.now())
+    l = ard.sensor.return_alle_data()
     return l
 
 # volgens mij waren deze en de volgende onbedoeld weggehaald
@@ -186,6 +191,14 @@ def omlaag_command():
 def omhoog_command():
     ar = get_arduino(selected)
     ar.status_omhoog()
+
+def manual_command():
+    ar = get_arduino(selected)
+    ar.status_manual()
+
+def autonomy_command():
+    ar = get_arduino(selected)
+    ar.status_autonomy()
 
 def insert_tree(tree):
     # Verwijder bestaande data

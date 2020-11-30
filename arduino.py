@@ -896,6 +896,21 @@ class Sensor:
         if len(l) != 0:
             gem = sum(l) / len(l)
         return gem
+    
+    def return_alle_data(self):
+        datum = datetime.datetime.now()
+        uur = datum.hour
+        dag = datum.day
+        maand = datum.month
+        jaar = datum.year
+
+        l = list()
+        if jaar in self.data:
+            if maand in self.data[jaar]:
+                if dag in self.data[jaar][maand]:
+                    l = self.data[jaar][maand][dag][uur]
+        
+        return l
 
 #####################################################################################################################################
 
@@ -938,6 +953,13 @@ class Arduino:
     def status_omlaag(self):
         data_transfer.command_omlaag(self)
         self.status = "omlaag"
+
+    def status_manual(self):
+        data_transfer.command_manual(self)
+    
+    def status_autonomy(self):
+        data_transfer.command_autonomy(self)
+
     
     # verander de naam
     def set_naam(self, naam):

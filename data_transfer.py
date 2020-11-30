@@ -3,6 +3,7 @@ import serial.tools.list_ports
 import serial
 import time
 import arduino
+import struct
 from string import ascii_lowercase
 
 # set const
@@ -18,8 +19,8 @@ CONST_MAX_ROLLOUT_CHANGE = b'\x09'
 CONST_MIN_TEMP_CHANGE = b'\x0A'
 CONST_MIN_LICHT_CHANGE = b'\x0B'
 CONST_MIN_ROLLOUT_CHANGE = b'\x0C'
-CONST_MANUAL = b'\x0E'
-CONST_AUTOMATIC = b'\x0D'
+CONST_MANUAL = (b'\x0E')
+CONST_AUTOMATIC = (b'\x0D')
 
 CONST_SLEEP = 0.01
 
@@ -31,37 +32,18 @@ def retreive_data(ar):
     ser = ar.serial
     sensor = ar.sensor
     # tijd tussen lezingen
-    s = 60
+    s = 6
     if isinstance(sensor, type(arduino.Lichtsensor())):
         sign = False
     else:
         sign = True
     # print("one")
     while(1):
-        i = 0
-        while i < 2:
-            b = ser.read()
-            value = int.from_bytes(b, byteorder='little', signed=sign)
-            # print("while")
-            if value == 30:
-                # print("hier")
-                b = ser.read()
-                value = int.from_bytes(b, byteorder='little', signed=sign)
-                if value == 0:
-                    ar.status = "Uitgerold"
-                elif value == 1:
-                    ar.status = "Opgerold"
-                elif value == 2:
-                    ar.status = "Uitrollen"
-                elif value == 3:
-                    ar.status = "Oprollen"
-            elif value == 31:
-                b = ser.read()
-                value = int.from_bytes(b, byteorder='little', signed=sign)
-                # print(value)
-                ar.sensor.collect_data(value)
-            i += 1
-
+        incoming_bytes = ser.read(4)
+        number_array = struct.unpack('<BBBB', incoming_bytes)
+        print(incoming_bytes, number_array)
+        if number_array[2] == 31:
+            sensor.collect_data(number_array[3])
         time.sleep(s)
 
 def send_sensor(ar):
@@ -77,13 +59,25 @@ def send_sensor(ar):
 # Command om op te rollen
 def command_omhoog(ar):
     ser = ar.serial
-    ser.write(CONST_STOPROLLEN)
+    print("sending",b'\x01', "moet 01 zijn")
+    ser.write(b'\x01')
 
 # Command om uit te rollen
-def command_omlaag(ar):
-    print("omlaag")
+def command_omlaag(ar):/
     ser = ar.serial
-    ser.write(CONST_UITROLLEN)
+    print("omlaag")
+    print("sending",b'\x02', "moet 02 zijn")
+    ser.write(b'\x02')
+
+def command_autonomy(ar):
+    ser = ar.serial
+    print("sending",b'\x0E', "moet 0E zijn")
+    ser.write(b'\x0E')
+
+def command_manual(ar):
+    ser = ar.serial
+    print("sending",b'\x0D', "moet 0D zijn")
+    ser.write(b'\x0D')
 
 # Command to change lower limit for temp & light sensors 
 def change_lower_limiet(ar, value):
