@@ -5,6 +5,7 @@ from tkinter import * #pip install tk
 from matplotlib import * #pip install matplotlib
 from pandas import DataFrame #pip install pandas
 import pandas as pd
+from matplotlib.figure import Figure 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -94,12 +95,26 @@ class Window(Frame):
         #openen startpagina(help)
         self.openHelpmij()
     
-    def lineChartSensorData(self, tempdata, locatie):
-        pprint(tempdata)
-        plt.plot(tempdata, linestyle='--', marker='o', color='b')
-        plt.ylabel('gemiddelde lezing')
-        plt.xlabel('tijd in uren')
-        plt.grid(True)
+    def lineChartSensorData(self, locatie):
+        # fig = Figure(figsize = (10, 5), dpi = 100)
+        # plot1 = fig.add_subplot(121)
+        lijst_van_data = list()
+        for ar in arduinos:
+            lijst_van_data.append(ar.sensor.return_alle_data())
+
+        # plot1.plot(lijst_van_data[0], linestyle='--', marker='o', color='b')
+        # #canvas = FigureCanvasTkAgg(fig, master = locatie)
+
+        # if len(lijst_van_data) == 2:
+        #     plot2 = fig.add_subplot(122)
+        #     plot2.plot(lijst_van_data[1], linestyle='--', marker='o', color='b')
+        
+        # canvas.draw()
+        # canvas.get_tk_widget().pack()
+
+        plt.plot(lijst_van_data[1], linestyle='--', marker='o', color='b')
+        plt.plot(lijst_van_data[0], linestyle='--', marker='o', color='b')
+
         plt.show()
 
     def hide_frames(self):
@@ -113,8 +128,7 @@ class Window(Frame):
 
     def openData(self):
         self.hide_frames()
-        for ar in arduinos:
-            self.lineChartSensorData(ar.sensor.return_alle_data(), sensordata)
+        self.lineChartSensorData(sensordata)
         sensordata.pack(fill="both", expand=1)
 
     def openStatusoverzicht(self):

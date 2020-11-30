@@ -932,7 +932,7 @@ class Arduino:
     # arduino is 1 item uit de lijst arduino_port uit connections
     def __init__(self, arduino, sensor, rolmin=8, rolmax=20):
         self.port = str(arduino[0])
-        self.naam = arduino[1].split(" (COM")[0]
+        self.naam = arduino[1]
         self.sensor = sensor
         self.serial = serial.Serial(self.port,  data_transfer.CONST_BAUT)
         time.sleep(2) # 2 sec voor arduino reset, zie https://stackoverflow.com/questions/21073086/wait-on-arduino-auto-reset-using-pyserial
